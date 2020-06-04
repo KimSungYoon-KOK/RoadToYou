@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#245598</color>
+    <color name="colorPrimaryDark">#0d357a</color>
+    <color name="white">#FFFFFF</color>
+    <color name="colorAccent">#0d357a</color>
+    <color name="colorBtn">#000000</color>
+
+    <color name="black">#000000</color>
+    <color name="black_alpha">#88000000</color>
+    <color name="layout_back">#CECECE</color>
+    <color name="falseBtn">#CECECE</color>
+
+    <color name="toolbar_background">#00000000</color>
+    <color name="invisible">#00000000</color>
+    <!-- Color -->
+    <color name="c1">#FAF1D6</color>
+    <color name="c2">#FAD4AE</color>
+    <color name="c3">#FDAFAB</color>
+    <color name="c4">#FADEE1</color>
+    <color name="c5">#D9F1F1</color>
+    <color name="c6">#B6E3E9</color>
+    <color name="c7">#ced4da</color>
 </resources>
