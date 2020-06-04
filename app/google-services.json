@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "149848968397",
+    "firebase_url": "https://roadtoyou-25329.firebaseio.com",
+    "project_id": "roadtoyou-25329",
+    "storage_bucket": "roadtoyou-25329.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149848968397:android:312998bf257fb3cc29ad84",
+        "android_client_info": {
+          "package_name": "com.kok.roadtoyou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "149848968397-3r3rt85vcio6hv7l08ufb12vr7mrmq3k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kok.roadtoyou",
+            "certificate_hash": "16fc85a4728b1f596c5ade048be8d5bd7fc711cc"
+          }
+        },
+        {
+          "client_id": "149848968397-8ifvm68i12gs8pc6s0tc5d5jv6bvlh0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZEAHSmlSLjura081EHHu8Hz5aG5QbElU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "149848968397-8ifvm68i12gs8pc6s0tc5d5jv6bvlh0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
