@@ -15,7 +15,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.kok.roadtoyou.R
 import kotlinx.android.synthetic.main.activity_search.*
 import org.json.JSONObject
+import org.jsoup.Connection
 import org.jsoup.Jsoup
+import org.jsoup.parser.Parser
 import java.lang.ref.WeakReference
 import java.net.URL
 import java.net.URLEncoder
@@ -23,7 +25,7 @@ import java.net.URLEncoder
 class SearchActivity : AppCompatActivity() {
 
     val key = "V3TPLc8KikVyK235xNyOorabnl1eDnekQJSTWtpl4eQXyE3MWxAUjlZXJo6PIxrmLZGlixdOVWTSs8PmCfb4nQ%3D%3D"
-    val suffix = "MobileOS=ETC&MobileApp=AppTest"
+    val suffix = "MobileOS=AND&MobileApp=roadtoyou"
 
     val itemList = ArrayList<ArrayList<Places>>(4)
     lateinit var adapter: SearchViewPagerAdapter
@@ -32,7 +34,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        handleIntent(intent)
+        //handleIntent(intent)
         initViewPager()
 
     }
@@ -69,30 +71,33 @@ class SearchActivity : AppCompatActivity() {
             val activity = activityreference.get()
             activity?.adapter?.itemList?.clear()
 
-            val doc = Jsoup.connect(p0[0].toString()).get()
+            //val doc = Jsoup.connect(p0[0].toString()).parser(Parser.xmlParser()).get()
+            val response = Jsoup.connect(p0[0].toString()).method(Connection.Method.GET).execute()
+            val doc = response.parse()
+            val items = doc.select("item")
             val totalCount = doc.select("totalCount").toString().toInt()
-            for (i in 0 until totalCount) {
-                val item = Places(
-                    doc.select("contentid").toString().toInt(),             //Place ID
-                    doc.select("title").toString(),                         //Place Title
-                    doc.select("contenttypeid").toString().toInt(),         //Place Type
-                    doc.select("mapx").toString().toDouble(),               //Location X
-                    doc.select("mapy").toString().toDouble(),               //Location Y
-                    doc.select("addr1").toString(),                         //Addr 1
-                    doc.select("addr2").toString(),                         //Addr 2
-                    doc.select("tel").toString(),                           //Tel
+            for (item in items) {
+                val tempItem = Places(
+                    item.select("contentid").toString().toInt(),             //Place ID
+                    item.select("title").toString(),                         //Place Title
+                    item.select("contenttypeid").toString().toInt(),         //Place Type
+                    item.select("mapx").toString().toDouble(),               //Location X
+                    item.select("mapy").toString().toDouble(),               //Location Y
+                    item.select("addr1").toString(),                         //Addr 1
+                    item.select("addr2").toString(),                         //Addr 2
+                    item.select("tel").toString(),                           //Tel
                     //doc.select(""),                                         //Servertype
                     1,
-                    doc.select("").toString()                               //URL
-                )
+                    item.select("firstimage2").toString())                    //URL
+                Log.d("ITEM", tempItem.toString())
 
                 // ContentType : 관광지 12   /   문화시설 14 행사/공연/축제 15 레포츠 28    /   음식점 39   /   숙박 32
-                val contentType = item.type
+                val contentType = tempItem.type
                 when(contentType) {
-                    12 -> activity?.adapter!!.itemList[0].add(item)
-                    39 -> activity?.adapter!!.itemList[2].add(item)
-                    32 -> activity?.adapter!!.itemList[3].add(item)
-                    else -> activity?.adapter!!.itemList[1].add(item)
+                    12 -> activity?.adapter!!.itemList[0].add(tempItem)
+                    39 -> activity?.adapter!!.itemList[2].add(tempItem)
+                    32 -> activity?.adapter!!.itemList[3].add(tempItem)
+                    else -> activity?.adapter!!.itemList[1].add(tempItem)
                 }
             }
         }
@@ -108,17 +113,17 @@ class SearchActivity : AppCompatActivity() {
 
 
     ////////////////////////////////////// Search Bar 구현 /////////////////////////////////////////
-    private fun handleIntent(intent: Intent) {
-        if (Intent.ACTION_SEARCH == intent.action) {
-            val query = intent.getStringExtra(SearchManager.QUERY)
-            //use the query to search your data somehow
-        }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleIntent(intent)
-    }
+//    private fun handleIntent(intent: Intent) {
+//        if (Intent.ACTION_SEARCH == intent.action) {
+//            val query = intent.getStringExtra(SearchManager.QUERY)
+//            //use the query to search your data somehow
+//        }
+//    }
+//
+//    override fun onNewIntent(intent: Intent) {
+//        super.onNewIntent(intent)
+//        handleIntent(intent)
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)

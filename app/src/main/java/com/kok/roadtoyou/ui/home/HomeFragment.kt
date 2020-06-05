@@ -41,9 +41,8 @@ class HomeFragment : Fragment() {
     private fun initRecyclerView() {
         layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView_home.layoutManager = layoutManager
-        rdb = FirebaseDatabase.getInstance().getReference("Home/reviews")
-        //TODO : limitToLast
-        val query = FirebaseDatabase.getInstance().reference.child("Products/items").limitToLast(50)
+        rdb = FirebaseDatabase.getInstance().getReference("Reviews/items")
+        val query = FirebaseDatabase.getInstance().reference.child("Reviews/items").limitToLast(50)
         val option = FirebaseRecyclerOptions.Builder<HomeItem>()
             .setQuery(query, HomeItem::class.java)
             .build()

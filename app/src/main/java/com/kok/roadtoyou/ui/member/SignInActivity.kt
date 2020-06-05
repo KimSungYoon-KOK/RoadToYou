@@ -93,7 +93,6 @@ class SignInActivity : AppCompatActivity() {
             }
     }
 
-
     companion object {
         private const val RC_SIGN_IN = 123
     }

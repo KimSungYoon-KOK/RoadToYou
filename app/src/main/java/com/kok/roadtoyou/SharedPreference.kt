@@ -10,30 +10,25 @@ class SharedPreference(context: Context) {
 
     val PREF_LOGIN_FLAG = "login_FLAG"
     val PREF_USER_ID = "userID"
-    val PREF_USER_ID_NUM = "userID_NUM"
+    val PREF_USER_UID = "userUID"
     val PREF_USER_NAME = "userName"
     val PREF_USER_MAIL = "userMail"
 
-    fun setUserID(userID: String, userID_NUM: Int, login_FLAG: Boolean) {
-        val editor = prefs.edit()
-        editor.putString(PREF_USER_ID, userID)
-        editor.putInt(PREF_USER_ID_NUM, userID_NUM)
-        editor.putBoolean(PREF_LOGIN_FLAG, login_FLAG)
-        editor.apply()
-    }
-
-    fun setUserInfo(userName: String, userMail: String) {
+    fun setUserInfo(userName: String, userMail: String, userUID: String) {
         val editor = prefs.edit()
         editor.putString(PREF_USER_NAME, userName)
         editor.putString(PREF_USER_MAIL, userMail)
+        editor.putString(PREF_USER_UID, userUID)
         editor.apply()
     }
 
-    fun getUserID(): String? {
-        return prefs.getString(PREF_USER_ID, null)
+    fun getUserName(): String? {
+        return prefs.getString(PREF_USER_NAME, null)
     }
-
-    fun getAutoLoginFlag(): Boolean {
-        return prefs.getBoolean(PREF_LOGIN_FLAG, false)
+    fun getUserMail(): String? {
+        return prefs.getString(PREF_USER_MAIL, null)
+    }
+    fun getUserUID(): String? {
+        return prefs.getString(PREF_USER_UID, null)
     }
 }
