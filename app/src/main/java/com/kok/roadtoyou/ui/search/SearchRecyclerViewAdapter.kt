@@ -1,5 +1,6 @@
 package com.kok.roadtoyou.ui.search
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
@@ -7,12 +8,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.kok.roadtoyou.R
 
 class SearchRecyclerViewAdapter(val flag: Boolean, val items: ArrayList<Places>):
         RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder>() {
 
     var itemClickListener: OnItemClickListener? = null
+    lateinit var context : Context
 
     interface OnItemClickListener {
         fun OnItemClick(view: View, position: Int)
@@ -42,6 +45,7 @@ class SearchRecyclerViewAdapter(val flag: Boolean, val items: ArrayList<Places>)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        context = parent.context
         val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_search, parent, false)
         return ViewHolder(v)
@@ -53,15 +57,10 @@ class SearchRecyclerViewAdapter(val flag: Boolean, val items: ArrayList<Places>)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val url = items.get(position).url
-//        Glide.with(context).load(url).placeholder(R.drawable.logo).into(holder.thumbnail)
-
-//        if(data != null){
-//            if(data.url != null){
-//            } else {
-//                Glide.with(context).load(R.drawable.logo).into(holder.thumbnail)
-//                Log.v("Thumbnail2", "null")
-//            }
-//        }
+        Glide.with(context).load(url)
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .error(R.drawable.ic_baseline_error_outline_24)
+            .into(holder.thumbnail)
 
         holder.searchTitle.text = items.get(position).title
         if (flag) {

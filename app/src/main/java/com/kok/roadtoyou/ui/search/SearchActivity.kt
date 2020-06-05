@@ -27,7 +27,7 @@ class SearchActivity : AppCompatActivity() {
     val key = "V3TPLc8KikVyK235xNyOorabnl1eDnekQJSTWtpl4eQXyE3MWxAUjlZXJo6PIxrmLZGlixdOVWTSs8PmCfb4nQ%3D%3D"
     val suffix = "MobileOS=AND&MobileApp=roadtoyou"
 
-    val itemList = ArrayList<ArrayList<Places>>(4)
+    val itemList = ArrayList<ArrayList<Places>>()
     lateinit var adapter: SearchViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,11 +35,16 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
 
         //handleIntent(intent)
+        init()
         initViewPager()
-
     }
 
     ////////////////////////////////////// ViewPager2 init /////////////////////////////////////////
+    private fun init() {
+        for (i in 0..3)
+            itemList.add(ArrayList())
+    }
+
     private fun initViewPager() {
         //TODO: intent로 flag 선언
         val flag = intent.hasExtra("FLAG")
@@ -67,28 +72,29 @@ class SearchActivity : AppCompatActivity() {
 
         val activityreference = WeakReference(context)
 
-        override fun doInBackground(vararg p0: URL?): Unit {
+        override fun doInBackground(vararg params: URL?): Unit {
             val activity = activityreference.get()
             activity?.adapter?.itemList?.clear()
+           for (i in 0..3)
+                activity?.adapter?.itemList?.add(ArrayList())
 
-            //val doc = Jsoup.connect(p0[0].toString()).parser(Parser.xmlParser()).get()
-            val response = Jsoup.connect(p0[0].toString()).method(Connection.Method.GET).execute()
-            val doc = response.parse()
+
+            val doc = Jsoup.connect(params[0].toString()).parser(Parser.xmlParser()).get()
             val items = doc.select("item")
-            val totalCount = doc.select("totalCount").toString().toInt()
+            //val totalCount = doc.select("totalCount").text().toString().toInt()
             for (item in items) {
                 val tempItem = Places(
-                    item.select("contentid").toString().toInt(),             //Place ID
-                    item.select("title").toString(),                         //Place Title
-                    item.select("contenttypeid").toString().toInt(),         //Place Type
-                    item.select("mapx").toString().toDouble(),               //Location X
-                    item.select("mapy").toString().toDouble(),               //Location Y
-                    item.select("addr1").toString(),                         //Addr 1
-                    item.select("addr2").toString(),                         //Addr 2
-                    item.select("tel").toString(),                           //Tel
+                    item.select("contentid").text().toString().toInt(),             //Place ID
+                    item.select("title").text().toString(),                         //Place Title
+                    item.select("contenttypeid").text().toString().toInt(),         //Place Type
+                    item.select("mapx").text().toString().toDouble(),               //Location X
+                    item.select("mapy").text().toString().toDouble(),               //Location Y
+                    item.select("addr1").text().toString(),                         //Addr 1
+                    item.select("addr2").text().toString(),                         //Addr 2
+                    item.select("tel").text().toString(),                           //Tel
                     //doc.select(""),                                         //Servertype
                     1,
-                    item.select("firstimage2").toString())                    //URL
+                    item.select("firstimage2").text().toString())                    //URL
                 Log.d("ITEM", tempItem.toString())
 
                 // ContentType : 관광지 12   /   문화시설 14 행사/공연/축제 15 레포츠 28    /   음식점 39   /   숙박 32
@@ -107,6 +113,7 @@ class SearchActivity : AppCompatActivity() {
             val activity = activityreference.get()
             if (activity == null || activity.isFinishing)
                 return
+            activity.adapter.notifyDataSetChanged()
         }
     }
 
