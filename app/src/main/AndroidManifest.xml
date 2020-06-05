@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".App"
@@ -21,9 +22,13 @@
             android:value="@integer/google_play_services_version" /> <!-- Google Map API 키 추가 -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCCeItObnu3LVd32UbVqJ-p9YrngB2vd8o" />
+            android:value="AIzaSyCCeItObnu3LVd32UbVqJ-p9YrngB2vd8o" /> <!-- SearchView -->
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
 
-        <activity android:name=".SplashActivity"
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,10 +36,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:label="@string/app_name"/>
-        <activity android:name=".ui.member.LoginActivity"
-            android:theme="@style/LoginTheme"/>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".ui.member.SignInActivity"
+            android:theme="@style/LoginTheme" />
+        <activity android:name=".ui.member.SignUpActivity"
+            android:parentActivityName=".ui.member.SignInActivity"/>
+        <activity android:name=".ui.member.NameActivity"/>
         <activity
             android:name=".ui.addplan.MakePlanActivity"
             android:parentActivityName=".MainActivity" />
@@ -46,8 +56,11 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ui.search.SearchActivity"
-            android:parentActivityName=".MainActivity" />
-
+            android:parentActivityName=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

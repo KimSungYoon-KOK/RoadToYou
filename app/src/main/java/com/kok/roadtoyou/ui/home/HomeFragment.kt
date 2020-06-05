@@ -106,10 +106,10 @@ class HomeFragment : Fragment() {
             R.id.action_search -> {
                 val intent = Intent(activity, SearchActivity::class.java)
                 startActivity(intent)
-                return true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> return false
         }
+        return true
     }
 
 

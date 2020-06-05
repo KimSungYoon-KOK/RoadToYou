@@ -32,9 +32,9 @@ class MyPageFragment : Fragment() {
             R.id.action_setting -> {
                 val intent = Intent(activity, SettingActivity::class.java)
                 startActivity(intent)
-                return true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> return false
         }
+        return true
     }
 }

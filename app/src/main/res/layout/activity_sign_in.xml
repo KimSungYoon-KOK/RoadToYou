@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.member.LoginActivity"
+    tools:context=".ui.member.SignInActivity"
     android:orientation="vertical"
     android:gravity="center_horizontal|bottom"
     android:background="@color/white">
@@ -15,7 +15,7 @@
         android:id="@+id/input_id"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:hint="ID"
+        android:hint="Email"
         android:imeOptions="actionNext"
         android:maxLines="1"
         android:inputType="text"
@@ -32,23 +32,20 @@
         />
 
     <Button
-        android:id="@+id/logInBtn"
+        android:id="@+id/signInBtn"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:background="@drawable/ripple_effect_rectangular"
         android:textColor="@color/white"
         android:text="시작하기"
-        android:layout_marginTop="15dp"
-        />
+        android:layout_marginTop="15dp" />
 
-
-    <CheckBox
-        android:text="자동 로그인 하기"
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/googleSignInBtn"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/autoLogin"
-        android:layout_marginTop="13dp"
-        />
+        android:layout_height="wrap_content"/>
+
     <TextView
         android:id="@+id/signUpBtn"
         android:layout_width="wrap_content"
@@ -58,16 +55,7 @@
         android:layout_marginTop="30dp"
         android:clickable="true"
         android:background="@drawable/ripple_effect_2"
-        android:linksClickable="true"/>
-    <TextView
-        android:id="@+id/nonMember"
-        android:text="비회원으로 시작하기"
-        android:layout_width="wrap_content"
-        android:textColor="@color/layout_back"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:clickable="true"
-        android:background="@drawable/ripple_effect_2"
-        android:layout_marginBottom="50dp" />
+        android:linksClickable="true"
+        android:layout_marginBottom="50dp"/>
 
 </LinearLayout>
