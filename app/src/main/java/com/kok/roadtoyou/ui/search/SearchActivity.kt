@@ -24,10 +24,10 @@ import java.net.URLEncoder
 
 class SearchActivity : AppCompatActivity() {
 
-    val key = "V3TPLc8KikVyK235xNyOorabnl1eDnekQJSTWtpl4eQXyE3MWxAUjlZXJo6PIxrmLZGlixdOVWTSs8PmCfb4nQ%3D%3D"
-    val suffix = "MobileOS=AND&MobileApp=roadtoyou"
+    private val key = "V3TPLc8KikVyK235xNyOorabnl1eDnekQJSTWtpl4eQXyE3MWxAUjlZXJo6PIxrmLZGlixdOVWTSs8PmCfb4nQ%3D%3D"
+    private val suffix = "MobileOS=AND&MobileApp=roadtoyou"
 
-    val itemList = ArrayList<ArrayList<Places>>()
+    private val itemList = ArrayList<ArrayList<Places>>()
     lateinit var adapter: SearchViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

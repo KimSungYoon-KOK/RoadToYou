@@ -13,7 +13,6 @@
         android:layout_height="50dp"
         android:layout_margin="5dp"
         android:scaleType="centerCrop"
-        android:visibility="gone"
         />
 
     <TextView

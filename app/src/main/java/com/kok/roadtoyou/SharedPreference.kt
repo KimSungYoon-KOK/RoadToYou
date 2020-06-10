@@ -8,8 +8,6 @@ class SharedPreference(context: Context) {
     val PREFS_FILENAME = "prefs"
     val prefs: SharedPreferences = context.getSharedPreferences(PREFS_FILENAME, 0)
 
-    val PREF_LOGIN_FLAG = "login_FLAG"
-    val PREF_USER_ID = "userID"
     val PREF_USER_UID = "userUID"
     val PREF_USER_NAME = "userName"
     val PREF_USER_MAIL = "userMail"

@@ -1,6 +1,7 @@
 package com.kok.roadtoyou.ui.search
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,16 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kok.roadtoyou.R
 
 class SearchViewPagerAdapter (
-    val flag: Boolean,
+    private val flag: Boolean,
     val itemList: ArrayList<ArrayList<Places>>
 ) : RecyclerView.Adapter<SearchViewPagerAdapter.ViewHolder>() {
 
-    lateinit var layoutManager: LinearLayoutManager
-    lateinit var adapter: SearchRecyclerViewAdapter
+    private lateinit var adapter: SearchRecyclerViewAdapter
     lateinit var context: Context
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerView_search)
+        val recyclerView: RecyclerView = itemView.findViewById(R.id.recyclerView_search)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,10 +32,22 @@ class SearchViewPagerAdapter (
         return itemList.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        holder.recyclerView.layoutManager = layoutManager
-        adapter = SearchRecyclerViewAdapter(flag, itemList[position])
+    override fun onBindViewHolder(holder: ViewHolder, position1: Int) {
+        holder.recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        adapter = SearchRecyclerViewAdapter(flag, itemList[position1])
+        adapter.itemClickListener = object : SearchRecyclerViewAdapter.OnItemClickListener {
+            override fun OnItemClick(view: View, position2: Int) {
+                val intent = Intent(context, SearchDetailActivity::class.java)
+                intent.putExtra("FLAG", flag)       // 시작 액티비티가 SearchActivity == false, AddPlaceActivity == true
+                intent.putExtra("PLACE_DATA", itemList[position1][position2])
+                context.startActivity(intent)
+            }
+
+            override fun OnSelectClick(view: View, position: Int) {
+//                TODO("Not yet implemented")
+            }
+
+        }
         holder.recyclerView.adapter = adapter
     }
 

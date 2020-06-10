@@ -8,19 +8,20 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
 
         <!-- Google Play Service 버전 추가 -->
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" /> <!-- Google Map API 키 추가 -->
+            android:value="@integer/google_play_services_version" />
+        <!-- Google Map API 키 추가 -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCCeItObnu3LVd32UbVqJ-p9YrngB2vd8o" />
@@ -44,9 +45,10 @@
         <activity
             android:name=".ui.member.SignInActivity"
             android:theme="@style/LoginTheme" />
-        <activity android:name=".ui.member.SignUpActivity"
-            android:parentActivityName=".ui.member.SignInActivity"/>
-        <activity android:name=".ui.member.NameActivity"/>
+        <activity
+            android:name=".ui.member.SignUpActivity"
+            android:parentActivityName=".ui.member.SignInActivity" />
+        <activity android:name=".ui.member.NameActivity" />
         <activity
             android:name=".ui.addplan.MakePlanActivity"
             android:parentActivityName=".MainActivity" />
@@ -63,6 +65,7 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.search.SearchDetailActivity" />
     </application>
 
 </manifest>

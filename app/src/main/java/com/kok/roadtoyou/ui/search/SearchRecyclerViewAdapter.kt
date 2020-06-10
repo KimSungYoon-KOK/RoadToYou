@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kok.roadtoyou.R
 
-class SearchRecyclerViewAdapter(val flag: Boolean, val items: ArrayList<Places>):
+class SearchRecyclerViewAdapter(private val flag: Boolean, private val items: ArrayList<Places>):
         RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder>() {
 
     var itemClickListener: OnItemClickListener? = null
@@ -23,15 +23,11 @@ class SearchRecyclerViewAdapter(val flag: Boolean, val items: ArrayList<Places>)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var thumbnail: ImageView
-        var searchTitle: TextView
-        var selectBtn: TextView
+        var thumbnail: ImageView = itemView.findViewById(R.id.search_thumbnail)
+        var searchTitle: TextView = itemView.findViewById(R.id.search_title)
+        var selectBtn: TextView = itemView.findViewById(R.id.selectBtn)
 
         init {
-            thumbnail = itemView.findViewById(R.id.search_thumbnail)
-            searchTitle = itemView.findViewById(R.id.search_title)
-            selectBtn = itemView.findViewById(R.id.selectBtn)
-
             //아이템 클릭 -> 자세한 정보 Activity
             itemView.setOnClickListener {
                 itemClickListener?.OnItemClick(it, adapterPosition)
@@ -66,7 +62,6 @@ class SearchRecyclerViewAdapter(val flag: Boolean, val items: ArrayList<Places>)
         if (flag) {
             holder.selectBtn.visibility = VISIBLE
         }
-
     }
 
 
