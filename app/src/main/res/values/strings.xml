@@ -3,4 +3,6 @@
     <string name="title_home">Home</string>
     <string name="title_add_plan">Add Plan</string>
     <string name="title_my_page">My Page</string>
+
+    <string name="copyright_img">데이터 제공 : 한국관광공사</string>
 </resources>

@@ -11,7 +11,7 @@ import com.kok.roadtoyou.R
 
 class SearchViewPagerAdapter (
     private val flag: Boolean,
-    val itemList: ArrayList<ArrayList<Places>>
+    val itemList: ArrayList<ArrayList<PlaceItem>>
 ) : RecyclerView.Adapter<SearchViewPagerAdapter.ViewHolder>() {
 
     private lateinit var adapter: SearchRecyclerViewAdapter

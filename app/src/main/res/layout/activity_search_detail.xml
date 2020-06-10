@@ -18,8 +18,7 @@
                 android:id="@+id/no_image"
                 android:layout_centerInParent="true"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/ic_baseline_error_outline_24" />
+                android:layout_height="100dp" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewpager_detail_image"
@@ -119,7 +118,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:text="@string/copyright_img"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View.GONE
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -16,8 +17,6 @@ import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
 import java.lang.ref.WeakReference
 import java.net.URL
-import java.net.URLEncoder
-import kotlin.properties.Delegates
 
 class SearchDetailActivity : AppCompatActivity() {
 
@@ -25,7 +24,7 @@ class SearchDetailActivity : AppCompatActivity() {
     private val suffix = "&imageYN=Y&MobileOS=AND&MobileApp=roadtoyou"
 
     var imgList = ArrayList<String>()
-    lateinit var placeInfo: Places
+    lateinit var placeInfo: PlaceItem
     lateinit var adapter: SearchDetailViewPagerAdapter
 
     lateinit var googleMap: GoogleMap
@@ -51,12 +50,14 @@ class SearchDetailActivity : AppCompatActivity() {
         }
 
         initData()
-        initMap(LatLng(placeInfo.posX!!, placeInfo.posY!!))
+        initMap(LatLng(placeInfo.lat!!, placeInfo.lng!!))
     }
 
     private fun initData() {
         val flag = intent.getBooleanExtra("FLAG", false)
         placeInfo = intent.getParcelableExtra("PLACE_DATA")
+        Log.d("Log_PLACE_INFO", placeInfo.toString())
+
 
         if (flag) {
             // 시작 액티비티가 SearchActivity == false, AddPlaceActivity == true
@@ -71,11 +72,9 @@ class SearchDetailActivity : AppCompatActivity() {
         detail_title.text = placeInfo.title
         detail_address.text = "주소: " + placeInfo.addr1
 
-        if(placeInfo.tel == "02-120" || placeInfo.tel == "전환번호 미등록" || placeInfo.tel == "none"){
-            detail_tel.text = "전화 번호 미등록..."
-        } else {
-            detail_tel.text = "전화 번호: " + placeInfo.tel
-        }
+        if(placeInfo.tel == "") detail_tel.visibility = GONE
+        else detail_tel.text = "전화 번호: " + placeInfo.tel
+
 
         when(placeInfo.type){
             39 -> detail_type.append("#맛집 ")

@@ -17,7 +17,22 @@ class MakePlanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_make_plan)
+        init()
+    }
+    private fun init() {
         initMap()
+
+        val flag = intent.getIntExtra("FLAG_KEY", -1)
+        val startDate = intent.getStringExtra("START_DATE")
+        val endDate = intent.getStringExtra("END_DATE")
+
+//        intent.putExtra("PLAN_DATE", resultStr)
+//        intent.putExtra("PLAN_RANGE", days.size)
+        if (flag == 1){
+            //from AddPlanFragment
+        } else {
+            //from MyPageFragment
+        }
     }
 
     private fun initMap() {

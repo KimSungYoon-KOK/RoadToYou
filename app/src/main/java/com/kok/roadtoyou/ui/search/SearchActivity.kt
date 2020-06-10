@@ -2,20 +2,15 @@ package com.kok.roadtoyou.ui.search
 
 import android.app.SearchManager
 import android.content.Context
-import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.widget.SearchView
-import android.widget.Toast
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kok.roadtoyou.R
 import kotlinx.android.synthetic.main.activity_search.*
-import org.json.JSONObject
-import org.jsoup.Connection
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
 import java.lang.ref.WeakReference
@@ -27,7 +22,7 @@ class SearchActivity : AppCompatActivity() {
     private val key = "V3TPLc8KikVyK235xNyOorabnl1eDnekQJSTWtpl4eQXyE3MWxAUjlZXJo6PIxrmLZGlixdOVWTSs8PmCfb4nQ%3D%3D"
     private val suffix = "MobileOS=AND&MobileApp=roadtoyou"
 
-    private val itemList = ArrayList<ArrayList<Places>>()
+    private val itemList = ArrayList<ArrayList<PlaceItem>>()
     lateinit var adapter: SearchViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +60,9 @@ class SearchActivity : AppCompatActivity() {
     fun startTask(query: String?) {
         val task = MyAsyncTask(this)
         val keyword = URLEncoder.encode(query, "UTF-8")
-        task.execute(URL("http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?ServiceKey=$key&keyword=$keyword&$suffix"))
+        val url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/searchKeyword?ServiceKey=$key&keyword=$keyword&$suffix"
+        Log.d("Log_URL", url)
+        task.execute(URL(url))
     }
 
     class MyAsyncTask(context: SearchActivity): AsyncTask<URL, Unit, Unit>() {
@@ -83,17 +80,30 @@ class SearchActivity : AppCompatActivity() {
             val items = doc.select("item")
             //val totalCount = doc.select("totalCount").text().toString().toInt()
             for (item in items) {
-                val tempItem = Places(
+
+//                val temp1 = item.select("contentid").text().toString()             //Place ID
+//                val temp2 = item.select("title").text().toString()                        //Place Title
+//                val temp3 = item.select("contenttypeid").text().toString()         //Place Type
+//                val temp4 = item.select("mapx").text().toString()               //lng(경도)
+//                val temp5 = item.select("mapy").text().toString()               //lat(위도)
+//                val temp6 = item.select("addr1").text().toString()                         //Addr 1
+//                val temp7 = item.select("addr2").text().toString()                         //Addr 2
+//                val temp8 = item.select("tel").text().toString()                           //Tel
+//                val temp9 = item.select("firstimage2").text().toString()                    //URL
+//
+//                if (temp1.isEmpty() || temp2.isEmpty() || temp3.isEmpty() || temp4.isEmpty() || temp5.isEmpty() || temp6.isEmpty() || temp7.isEmpty() || temp8.isEmpty() || temp9.isEmpty() ) {
+//                    Log.d("Log_TEMP", temp1+" / "+temp2+" / "+temp3+" / "+temp4+" / "+temp5+" / "+temp6+" / "+temp7+" / "+temp8+" / "+temp9)
+//                }
+
+                val tempItem = PlaceItem(
                     item.select("contentid").text().toString().toInt(),             //Place ID
                     item.select("title").text().toString(),                         //Place Title
                     item.select("contenttypeid").text().toString().toInt(),         //Place Type
-                    item.select("mapx").text().toString().toDouble(),               //Location X
-                    item.select("mapy").text().toString().toDouble(),               //Location Y
+                    item.select("mapx").text().toString().toDouble(),               //lng(경도)
+                    item.select("mapy").text().toString().toDouble(),               //lat(위도)
                     item.select("addr1").text().toString(),                         //Addr 1
                     item.select("addr2").text().toString(),                         //Addr 2
                     item.select("tel").text().toString(),                           //Tel
-                    //doc.select(""),                                         //Servertype
-                    1,
                     item.select("firstimage2").text().toString())                    //URL
                 Log.d("ITEM", tempItem.toString())
 
@@ -146,7 +156,6 @@ class SearchActivity : AppCompatActivity() {
                 searchView.requestFocus()
                 searchView.setQuery("",false)
                 searchItem.collapseActionView()
-                Toast.makeText(this@SearchActivity, "Looking for $query", Toast.LENGTH_SHORT).show()
                 startTask(query)
                 return true
             }

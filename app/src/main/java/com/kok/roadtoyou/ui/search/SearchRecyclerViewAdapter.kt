@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kok.roadtoyou.R
 
-class SearchRecyclerViewAdapter(private val flag: Boolean, private val items: ArrayList<Places>):
+class SearchRecyclerViewAdapter(private val flag: Boolean, private val items: ArrayList<PlaceItem>):
         RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder>() {
 
     var itemClickListener: OnItemClickListener? = null
