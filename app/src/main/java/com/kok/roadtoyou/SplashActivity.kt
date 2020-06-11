@@ -9,7 +9,6 @@ import com.kok.roadtoyou.ui.member.SignInActivity
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         init()
     }
 

@@ -1,19 +1,18 @@
 package com.kok.roadtoyou.ui.member
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
-import com.bumptech.glide.Glide
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.kok.roadtoyou.App
 import com.kok.roadtoyou.MainActivity
 import com.kok.roadtoyou.R
 import kotlinx.android.synthetic.main.activity_name.*
-import kotlinx.android.synthetic.main.activity_setting.*
 
 class NameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,12 +32,13 @@ class NameActivity : AppCompatActivity() {
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, count: Int, p3: Int) {
                 val input = et_name.text.toString().trim().length
-                startBtn.isEnabled = (input >= 3)
+                startBtn.isEnabled = (input >= 2)
             }
         })
 
         startBtn.setOnClickListener {
-            if(initUserInfo(et_name.text.toString().trim())) {
+            val name = et_name.text.toString().trim()
+            if(initUserInfo(name)) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -50,15 +50,13 @@ class NameActivity : AppCompatActivity() {
     }
 
     private fun initUserInfo(name: String):Boolean {
-        val email: String
-        val uid: String
         val user = FirebaseAuth.getInstance().currentUser
 
         if (user != null){
-            email = user.email.toString()
-            uid = user.uid
-            Log.d("USERINFO", email + "/"+name+"/" + uid)
-            App.prefs.setUserInfo(email, name, uid)
+            //DB에 현재 유저 정보 업로드
+            val rdb = FirebaseDatabase.getInstance().getReference("users")
+            val userInfo = User(user.uid, name, null)
+            rdb.child(user.uid).setValue(userInfo)
             return true
         }
         return false

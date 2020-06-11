@@ -1,18 +1,25 @@
 package com.kok.roadtoyou.ui.member
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.kok.roadtoyou.MainActivity
 import com.kok.roadtoyou.R
 import kotlinx.android.synthetic.main.activity_sign_in.*
+
 
 class SignInActivity : AppCompatActivity() {
 
@@ -82,8 +89,26 @@ class SignInActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    //로그인 성공
+                if (it.isSuccessful) {  //로그인 성공
+                    val user = auth.currentUser
+                    //DB에 유저 정보 있는지 확인 하고 없으면 저장
+                    val rdb = FirebaseDatabase.getInstance().getReference("users")
+                    rdb.orderByChild("uId").equalTo(user?.uid)
+                        .addListenerForSingleValueEvent( object : ValueEventListener {
+                            override fun onCancelled(p0: DatabaseError) {
+//                                TODO("Not yet implemented")
+                            }
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                val userCheck = dataSnapshot.value
+                                //Log.d("Log_User_Find", userCheck.toString())
+                                if (userCheck == null) {
+                                    val userInfo = User(user?.uid, user?.displayName, null)
+                                   // Log.d("Log_User_Info", userInfo.toString())
+                                    rdb.child(user?.uid!!).setValue(userInfo)
+                                }
+                            }
+                        })
+
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()

@@ -3,21 +3,25 @@ package com.kok.roadtoyou.ui.addplan
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.applikeysolutions.cosmocalendar.utils.SelectionType
-import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.kok.roadtoyou.App
 import com.kok.roadtoyou.R
-import kotlinx.android.synthetic.main.activity_make_plan.*
 import kotlinx.android.synthetic.main.fragment_add_plan.*
 import java.util.*
 
+
 class AddPlanFragment : Fragment() {
+
+    lateinit var mDatabase: DatabaseReference
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -66,21 +70,26 @@ class AddPlanFragment : Fragment() {
                     resultStr = "$startYear.$startMonth.$startDate"
 
                 //Add Firebase
-                val rdb = FirebaseDatabase.getInstance().getReference("Products/items")
-                val planId = 1
+                val userUID = FirebaseAuth.getInstance().currentUser?.uid
+                mDatabase = FirebaseDatabase.getInstance().getReference("users/$userUID")
+                val key = mDatabase.child("planId").push().key
+                Log.d("Log_Plan_Key", key)
                 val item = PlanItem(
+                    key,
                     resultStr,
-                    planId,
+                    listOf(userUID),
                     null
                 )
-                rdb.child(planId.toString()).setValue(item)
+                Log.d("Log_Plan_Info", item.toString())
+                mDatabase.child("/planId/$key").setValue(item)
 
                 val intent = Intent(activity, MakePlanActivity::class.java)
                 intent.putExtra("START_DATE", "$startYear-$startMonth-$startDate")
                 intent.putExtra("END_DATE", "$endYear-$endMonth-$endDate")
                 intent.putExtra("PLAN_DATE", resultStr)
                 intent.putExtra("PLAN_RANGE", days.size)
-                intent.putExtra("FLAG_KEY",1)
+                intent.putExtra("FLAG",1)
+                intent.putExtra("PLAN_ID", key)
                 startActivity(intent)
 
             } else{
