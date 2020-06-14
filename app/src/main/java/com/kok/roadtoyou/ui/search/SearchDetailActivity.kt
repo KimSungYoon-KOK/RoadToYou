@@ -54,16 +54,10 @@ class SearchDetailActivity : AppCompatActivity() {
     }
 
     private fun initData() {
-        val flag = intent.getBooleanExtra("FLAG", false)
-        placeInfo = intent.getParcelableExtra("PLACE_DATA")
+        placeInfo = intent.getParcelableExtra("PLACE_DATA")!!
         Log.d("Log_PLACE_INFO", placeInfo.toString())
-
-
-        if (flag) {
-            // 시작 액티비티가 SearchActivity == false, AddPlaceActivity == true
-        }
-
         imgTask(placeInfo.id)        //Image URL Parsing
+
         // TODO: 세부 정보 데이터 입력
         initView()
     }
@@ -74,7 +68,6 @@ class SearchDetailActivity : AppCompatActivity() {
 
         if(placeInfo.tel == "") detail_tel.visibility = GONE
         else detail_tel.text = "전화 번호: " + placeInfo.tel
-
 
         when(placeInfo.type){
             39 -> detail_type.append("#맛집 ")

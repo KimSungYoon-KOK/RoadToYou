@@ -52,13 +52,15 @@ class SearchRecyclerViewAdapter(private val flag: Boolean, private val items: Ar
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val url = items.get(position).url
+        val url = items[position].url
         Glide.with(context).load(url)
             .placeholder(R.drawable.ic_launcher_foreground)
             .error(R.drawable.ic_baseline_error_outline_24)
             .into(holder.thumbnail)
 
-        holder.searchTitle.text = items.get(position).title
+        holder.searchTitle.text = items[position].title
+
+        //flag == true : 선택 버튼 visible on
         if (flag) {
             holder.selectBtn.visibility = VISIBLE
         }

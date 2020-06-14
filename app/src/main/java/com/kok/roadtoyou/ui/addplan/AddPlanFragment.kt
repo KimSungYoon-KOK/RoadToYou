@@ -22,6 +22,7 @@ import java.util.*
 class AddPlanFragment : Fragment() {
 
     lateinit var mDatabase: DatabaseReference
+    private lateinit var days: List<Calendar>
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -50,49 +51,33 @@ class AddPlanFragment : Fragment() {
 
         //일정 만들기 버튼
         continueBtn.setOnClickListener {
-            val days = calendar_view.selectedDates      //List<Date>
-            if(days.size != 0){
-                val start = days[0]
-                val startDate = start.get(Calendar.DAY_OF_MONTH).toString()
-                val startMonth = (start.get(Calendar.MONTH) + 1).toString()
-                val startYear = start.get(Calendar.YEAR).toString()
+            val period = getPlanPeriod()
 
-                val end = days.get(days.size - 1)
-                val endDate = end.get(Calendar.DAY_OF_MONTH).toString()
-                val endMonth = (end.get(Calendar.MONTH) + 1).toString()
-                val endYear = end.get(Calendar.YEAR).toString()
-
-                var resultStr = ""
-                if(startYear == endYear)
-                    resultStr = "$startYear.$startMonth.$startDate - $endMonth.$endDate"
-
-                if(startYear == endYear && startMonth == endMonth && startDate == endDate)
-                    resultStr = "$startYear.$startMonth.$startDate"
-
+            if (period != null) {
                 //Add Firebase
-                val userUID = FirebaseAuth.getInstance().currentUser?.uid
-                mDatabase = FirebaseDatabase.getInstance().getReference("users/$userUID")
-                val key = mDatabase.child("planId").push().key
-                Log.d("Log_Plan_Key", key)
-                val item = PlanItem(
-                    key,
-                    resultStr,
-                    listOf(userUID),
-                    null
-                )
-                Log.d("Log_Plan_Info", item.toString())
-                mDatabase.child("/planId/$key").setValue(item)
+                val user = FirebaseAuth.getInstance().currentUser
+                if (user != null) {
+                    mDatabase = FirebaseDatabase.getInstance().getReference("users/${user.uid}")
+                    val key = mDatabase.child("planId").push().key
+                    Log.d("Log_Plan_Key", key)
+                    val item = PlanItem(
+                        key,
+                        period,
+                        days.size,
+                        listOf(user.uid),
+                        null
+                    )
+                    Log.d("Log_Plan_Info", item.toString())
+                    mDatabase.child("/planId/$key").setValue(item)
 
-                val intent = Intent(activity, MakePlanActivity::class.java)
-                intent.putExtra("START_DATE", "$startYear-$startMonth-$startDate")
-                intent.putExtra("END_DATE", "$endYear-$endMonth-$endDate")
-                intent.putExtra("PLAN_DATE", resultStr)
-                intent.putExtra("PLAN_RANGE", days.size)
-                intent.putExtra("FLAG",1)
-                intent.putExtra("PLAN_ID", key)
-                startActivity(intent)
-
-            } else{
+                    val intent = Intent(activity, MakePlanActivity::class.java)
+                    intent.putExtra("ACTIVITY_FLAG",1)
+                    intent.putExtra("PLAN_ITEM", item)
+                    startActivity(intent)
+                } else {
+                    Log.e("NOT USER", "NOT CURRENT USER")
+                }
+            } else {
                 Toast.makeText(activity, "날짜를 입력해주세요", Toast.LENGTH_SHORT).show()
             }
         }
@@ -100,6 +85,32 @@ class AddPlanFragment : Fragment() {
         //친구 초대하기 버튼
         addFriendBtn.setOnClickListener{
             //TODO: 친구 초대하기
+        }
+    }
+
+    private fun getPlanPeriod(): String? {
+        days = calendar_view.selectedDates      //List<Date>
+        if(days.isNotEmpty()) {
+            val start = days[0]
+            val startDate = start.get(Calendar.DAY_OF_MONTH).toString()
+            val startMonth = (start.get(Calendar.MONTH) + 1).toString()
+            val startYear = start.get(Calendar.YEAR).toString()
+
+            val end = days[days.size - 1]
+            val endDate = end.get(Calendar.DAY_OF_MONTH).toString()
+            val endMonth = (end.get(Calendar.MONTH) + 1).toString()
+            val endYear = end.get(Calendar.YEAR).toString()
+
+            var resultStr = "$startYear.$startMonth.$startDate - $startYear.$endMonth.$endDate"
+            if (startYear == endYear)
+                resultStr = "$startYear.$startMonth.$startDate - $endMonth.$endDate"
+
+            if (startYear == endYear && startMonth == endMonth && startDate == endDate)
+                resultStr = "$startYear.$startMonth.$startDate"
+
+            return resultStr
+        }else{
+            return null
         }
     }
 }

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp">
+
+        <View
+            android:id="@+id/lineView"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/c7"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="14dp"
+            />
+
+        <TextView
+            android:text="1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:id="@+id/tv_placeCount"
+            android:background="@drawable/circular_textview"/>
+
+    </RelativeLayout>
+
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:padding="8dp"
+        android:layout_marginRight="10dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#ffffff"
+            android:elevation="3dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textSize="15dp"
+                    android:id="@+id/tv_placeNm"/>
+                <TextView
+                    android:text="TextView"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/tv_placeType"
+                    android:textSize="12dp"
+                    android:textColor="@color/c7"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_baseline_drag_handle_24"
+                    android:id="@+id/movebtn"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="7dp"
+                    android:background="@drawable/ripple_effect_5_default"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_baseline_sync_24"
+                    android:id="@+id/syncbtn"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="7dp"
+                    android:background="@drawable/ripple_effect_5_default"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editbtn"
+                    app:srcCompat = "@drawable/ic_baseline_more_vert_24"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="7dp"
+                    android:background="@drawable/ripple_effect_5_default"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

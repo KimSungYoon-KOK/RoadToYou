@@ -1,7 +1,9 @@
 package com.kok.roadtoyou.ui.search
 
+import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +12,7 @@ import android.view.Menu
 import android.widget.SearchView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kok.roadtoyou.R
+import com.kok.roadtoyou.ui.addplan.MakePlanActivity
 import kotlinx.android.synthetic.main.activity_search.*
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
@@ -31,17 +34,18 @@ class SearchActivity : AppCompatActivity() {
 
         //handleIntent(intent)
         init()
-        initViewPager()
     }
 
     ////////////////////////////////////// ViewPager2 init /////////////////////////////////////////
     private fun init() {
         for (i in 0..3)
             itemList.add(ArrayList())
+
+        initViewPager()
     }
 
     private fun initViewPager() {
-        //TODO: intent로 flag 선언
+        //FLAG == TRUE : 선택버튼 visible on
         val flag = intent.hasExtra("FLAG")
         adapter = SearchViewPagerAdapter(flag, itemList)
         viewPager_search.adapter = adapter

@@ -1,13 +1,16 @@
 package com.kok.roadtoyou.ui.search
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kok.roadtoyou.R
+import com.kok.roadtoyou.ui.addplan.MakePlanActivity
 
 class SearchViewPagerAdapter (
     private val flag: Boolean,
@@ -43,10 +46,13 @@ class SearchViewPagerAdapter (
                 context.startActivity(intent)
             }
 
-            override fun OnSelectClick(view: View, position: Int) {
-//                TODO("Not yet implemented")
+            override fun OnSelectClick(view: View, position2: Int) {
+                val intent = Intent(context, MakePlanActivity::class.java)
+                intent.putExtra("PLACE_DATA", itemList[position1][position2])
+                //Log.d("Log_PLACE_DATA", itemList[position1][position2].toString())
+                (context as Activity).setResult(Activity.RESULT_OK, intent)
+                (context as Activity).finish()
             }
-
         }
         holder.recyclerView.adapter = adapter
     }
