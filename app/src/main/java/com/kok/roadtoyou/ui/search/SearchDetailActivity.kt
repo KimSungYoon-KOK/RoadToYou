@@ -23,11 +23,11 @@ class SearchDetailActivity : AppCompatActivity() {
     private val key = "V3TPLc8KikVyK235xNyOorabnl1eDnekQJSTWtpl4eQXyE3MWxAUjlZXJo6PIxrmLZGlixdOVWTSs8PmCfb4nQ%3D%3D"
     private val suffix = "&imageYN=Y&MobileOS=AND&MobileApp=roadtoyou"
 
-    var imgList = ArrayList<String>()
-    lateinit var placeInfo: PlaceItem
+    private var imgList = ArrayList<String>()
+    private lateinit var placeInfo: PlaceItem
     lateinit var adapter: SearchDetailViewPagerAdapter
 
-    lateinit var googleMap: GoogleMap
+    private lateinit var googleMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,16 +58,11 @@ class SearchDetailActivity : AppCompatActivity() {
         Log.d("Log_PLACE_INFO", placeInfo.toString())
         imgTask(placeInfo.id)        //Image URL Parsing
 
-        // TODO: 세부 정보 데이터 입력
-        initView()
-    }
-
-    private fun initView() {
         detail_title.text = placeInfo.title
-        detail_address.text = "주소: " + placeInfo.addr1
+        detail_address.text = "주소: ${placeInfo.addr1}"
 
         if(placeInfo.tel == "") detail_tel.visibility = GONE
-        else detail_tel.text = "전화 번호: " + placeInfo.tel
+        else detail_tel.text = "전화 번호: ${placeInfo.tel}"
 
         when(placeInfo.type){
             39 -> detail_type.append("#맛집 ")
@@ -105,7 +100,7 @@ class SearchDetailActivity : AppCompatActivity() {
 
     class ImgAsyncTask(context: SearchDetailActivity): AsyncTask<URL, Unit, Unit>() {
 
-        val activityreference = WeakReference(context)
+        private val activityreference = WeakReference(context)
 
         override fun doInBackground(vararg params: URL?): Unit {
             val activity = activityreference.get()

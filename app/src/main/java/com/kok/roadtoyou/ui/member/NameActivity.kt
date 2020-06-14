@@ -55,7 +55,7 @@ class NameActivity : AppCompatActivity() {
         if (user != null){
             //DB에 현재 유저 정보 업로드
             val rdb = FirebaseDatabase.getInstance().getReference("users")
-            val userInfo = User(user.uid, name, null)
+            val userInfo = User(user.uid, name)
             rdb.child(user.uid).setValue(userInfo)
             return true
         }

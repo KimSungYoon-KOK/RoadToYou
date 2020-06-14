@@ -5,6 +5,7 @@ import android.os.Parcelable
 
 data class PlanItem(
     var planID: String?,
+    var planName: String?,
     var period: String?,
     var days: Int?,
     var userId: List<String>?,
@@ -14,16 +15,18 @@ data class PlanItem(
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
+        parcel.readString(),
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.createStringArrayList(),
         parcel.createTypedArrayList(AddPlaceItem)
     ) {
     }
 
-    constructor(): this(null, null, null, null, null)
+    constructor(): this(null, null, null, null, null, null)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(planID)
+        parcel.writeString(planName)
         parcel.writeString(period)
         parcel.writeValue(days)
         parcel.writeStringList(userId)

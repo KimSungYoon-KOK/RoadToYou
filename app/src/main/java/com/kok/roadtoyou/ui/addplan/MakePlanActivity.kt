@@ -11,6 +11,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.kok.roadtoyou.R
 import com.kok.roadtoyou.ui.search.PlaceItem
 import com.kok.roadtoyou.ui.search.SearchActivity
@@ -23,8 +25,10 @@ class MakePlanActivity : AppCompatActivity() {
     lateinit var mMap: GoogleMap
 
     lateinit var adapter: MakePlanViewPagerAdapter
-    lateinit var item: PlanItem
+    lateinit var planItem: PlanItem
     var itemList = ArrayList<ArrayList<AddPlaceItem>>()
+
+    lateinit var placeDB: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +43,8 @@ class MakePlanActivity : AppCompatActivity() {
         val flag = intent.getIntExtra("ACTIVITY_FLAG", -1)
         if (flag == 1){
             //from AddPlanFragment
-            item = intent.getParcelableExtra("PLAN_ITEM")!!
-            tv_plan_date.text = item.period
+            planItem = intent.getParcelableExtra("PLAN_ITEM")!!
+            tv_plan_date.text = planItem.period
             initViewPager()
         } else {
             //from MyPageFragment
@@ -66,7 +70,7 @@ class MakePlanActivity : AppCompatActivity() {
     }
 
     private fun initViewPager() {
-        for (i in 0 until item.days!!){
+        for (i in 0 until planItem.days!!){
             val temp = ArrayList<AddPlaceItem>()
             itemList.add(temp)
         }
@@ -105,13 +109,15 @@ class MakePlanActivity : AppCompatActivity() {
                 SELECT_BTN -> {
                     //SearchActivity 에서 "선택"버튼으로 넘어왔을 때
                     if (data != null) {
-                        val item = data.getParcelableExtra<PlaceItem>("PLACE_DATA")
+                        val placeItem = data.getParcelableExtra<PlaceItem>("PLACE_DATA")
                         val selectDate = viewpager_make_plan.currentItem
-                        val placeItem = AddPlaceItem(
+                        val tempItem = AddPlaceItem(
                             selectDate,
                             itemList[selectDate].size +1,
-                            item )
-                        itemList[selectDate].add(placeItem)
+                            placeItem )
+                        placeDB = FirebaseDatabase.getInstance().getReference("plans/${planItem.planID}")
+                        placeDB.child("placeList/${placeItem.id}").setValue(tempItem)
+                        itemList[selectDate].add(tempItem)
                         adapter.notifyDataSetChanged()
                     }
                 }
@@ -119,5 +125,6 @@ class MakePlanActivity : AppCompatActivity() {
             }
         }
     }
+
 }
 

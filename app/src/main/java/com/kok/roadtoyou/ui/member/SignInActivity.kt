@@ -102,7 +102,7 @@ class SignInActivity : AppCompatActivity() {
                                 val userCheck = dataSnapshot.value
                                 //Log.d("Log_User_Find", userCheck.toString())
                                 if (userCheck == null) {
-                                    val userInfo = User(user?.uid, user?.displayName, null)
+                                    val userInfo = User(user?.uid, user?.displayName)
                                    // Log.d("Log_User_Info", userInfo.toString())
                                     rdb.child(user?.uid!!).setValue(userInfo)
                                 }

@@ -11,17 +11,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.applikeysolutions.cosmocalendar.utils.SelectionType
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.kok.roadtoyou.App
+import com.google.firebase.database.*
 import com.kok.roadtoyou.R
 import kotlinx.android.synthetic.main.fragment_add_plan.*
 import java.util.*
 
-
 class AddPlanFragment : Fragment() {
 
-    lateinit var mDatabase: DatabaseReference
+    lateinit var planDB: DatabaseReference
+    lateinit var userDB: DatabaseReference
     private lateinit var days: List<Calendar>
 
     override fun onCreateView(
@@ -57,18 +55,20 @@ class AddPlanFragment : Fragment() {
                 //Add Firebase
                 val user = FirebaseAuth.getInstance().currentUser
                 if (user != null) {
-                    mDatabase = FirebaseDatabase.getInstance().getReference("users/${user.uid}")
-                    val key = mDatabase.child("planId").push().key
-                    Log.d("Log_Plan_Key", key)
+                    userDB = FirebaseDatabase.getInstance().getReference("users/${user.uid}")
+                    val key = userDB.child("planList").push().key!!
+                    userDB.child("planList/${key}").setValue(period)
+                    planDB = FirebaseDatabase.getInstance().getReference("plans")
                     val item = PlanItem(
                         key,
+                        period,     //planName: 임시로 period 저장
                         period,
                         days.size,
                         listOf(user.uid),
                         null
                     )
                     Log.d("Log_Plan_Info", item.toString())
-                    mDatabase.child("/planId/$key").setValue(item)
+                    planDB.child(key).setValue(item)
 
                     val intent = Intent(activity, MakePlanActivity::class.java)
                     intent.putExtra("ACTIVITY_FLAG",1)

@@ -10,16 +10,14 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.kok.roadtoyou.R
 
-class MakePlanRecyclerViewAdapter(option: FirebaseRecyclerOptions<AddPlaceItem>)
-    : FirebaseRecyclerAdapter<AddPlaceItem, MakePlanRecyclerViewAdapter.ViewHolder>(option) {
+class MakePlanRecyclerViewAdapter(var items: ArrayList<AddPlaceItem>)
+    :RecyclerView.Adapter<MakePlanRecyclerViewAdapter.ViewHolder>() {
 
     var itemClickListener: OnItemClickListener? = null
-
 
     interface OnItemClickListener {
         fun OnItemClick(view: View, position: Int)
     }
-
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var placeCount: TextView = itemView.findViewById(R.id.tv_placeCount)
@@ -42,11 +40,14 @@ class MakePlanRecyclerViewAdapter(option: FirebaseRecyclerOptions<AddPlaceItem>)
         return ViewHolder(v)
     }
 
+    override fun getItemCount(): Int {
+        return items.size
+    }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: AddPlaceItem) {
-        holder.placeCount.text = model.count.toString()
-        holder.placeNm.text = model.placeInfo?.title
-        holder.placeType.text = when (model.placeInfo?.type) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.placeCount.text = items[position].count.toString()
+        holder.placeNm.text = items[position].placeInfo?.title
+        holder.placeType.text = when ( items[position].placeInfo?.type) {
             12 -> "관광지"
             14 -> "문화 시설"
             15 -> "행사/공연/축제"
