@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kok.roadtoyou.R
 import com.kok.roadtoyou.ui.addplan.PlanItem
 
-class MyPageRecyclerViewAdapter(var items: ArrayList<PlanItem>)
+class MyPageRecyclerViewAdapter(var items: ArrayList<MyItem>)
     : RecyclerView.Adapter<MyPageRecyclerViewAdapter.ViewHolder>() {
 
     var itemClickListener: OnItemClickListener ?= null
 
     interface OnItemClickListener {
-        fun OnItemClick(data: PlanItem, position: Int)
+        fun OnItemClick(data: MyItem, position: Int)
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

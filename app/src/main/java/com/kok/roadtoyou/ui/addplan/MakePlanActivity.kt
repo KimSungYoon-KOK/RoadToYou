@@ -49,7 +49,12 @@ class MakePlanActivity : AppCompatActivity() {
             initViewPager()
         } else {
             //from MyPageFragment
+            initPlan()
         }
+    }
+
+    private fun initPlan() {
+        //TODO: MyPageFragment에서 넘어와서 planID로 DB에 있는 PLANITEM 불러와야한다.
     }
 
     private fun initBtn() {

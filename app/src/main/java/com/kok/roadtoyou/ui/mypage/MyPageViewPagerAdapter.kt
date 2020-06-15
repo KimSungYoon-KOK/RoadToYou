@@ -1,15 +1,19 @@
 package com.kok.roadtoyou.ui.mypage
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kok.roadtoyou.MainActivity
 import com.kok.roadtoyou.R
-import com.kok.roadtoyou.ui.addplan.PlanItem
+import com.kok.roadtoyou.ui.addplan.MakePlanActivity
+import com.kok.roadtoyou.ui.review.RegisterReviewActivity
+import com.kok.roadtoyou.ui.review.ReviewActivity
 
-class MyPageViewPagerAdapter(val items: ArrayList<ArrayList<PlanItem>>)
+class MyPageViewPagerAdapter(private val items: ArrayList<ArrayList<MyItem>>)
     : RecyclerView.Adapter<MyPageViewPagerAdapter.ViewHolder>() {
 
     lateinit var context: Context
@@ -35,11 +39,11 @@ class MyPageViewPagerAdapter(val items: ArrayList<ArrayList<PlanItem>>)
         holder.recyclerView.layoutManager = layoutManager
         adapter = MyPageRecyclerViewAdapter(items[position])
         adapter.itemClickListener = object : MyPageRecyclerViewAdapter.OnItemClickListener {
-            override fun OnItemClick(data: PlanItem, position2: Int) {
+            override fun OnItemClick(data: MyItem, position2: Int) {
                 when(position) {
-                    0 -> { goMakePlanActivity() }
-                    1 -> { goRegisterReview() }
-                    2 -> { goReview() }
+                    0 -> { goMakePlanActivity(data) }
+                    1 -> { goRegisterReview(data) }
+                    2 -> { goReview(data) }
                 }
             }
         }
@@ -48,18 +52,24 @@ class MyPageViewPagerAdapter(val items: ArrayList<ArrayList<PlanItem>>)
     }
 
     //일정 작성 페이지
-    fun goMakePlanActivity() {
-
+    fun goMakePlanActivity(data: MyItem) {
+        val intent = Intent(context, MakePlanActivity::class.java)
+        intent.putExtra("PLAN_ID", data.planId)
+        (context.applicationContext as MainActivity).startActivity(intent)
     }
 
     //리뷰 등록 페이지
-    fun goRegisterReview() {
-
+    fun goRegisterReview(data: MyItem) {
+        val intent = Intent(context, RegisterReviewActivity::class.java)
+        intent.putExtra("PLAN_ID", data.planId)
+        (context.applicationContext as MainActivity).startActivity(intent)
     }
 
     //리뷰 보기 페이지
-    fun goReview() {
-
+    fun goReview(data: MyItem) {
+        val intent = Intent(context, ReviewActivity::class.java)
+        intent.putExtra("PLAN_ID", data.planId)
+        (context.applicationContext as MainActivity).startActivity(intent)
     }
 
 }
