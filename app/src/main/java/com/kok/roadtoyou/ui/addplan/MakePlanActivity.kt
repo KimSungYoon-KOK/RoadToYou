@@ -118,7 +118,7 @@ class MakePlanActivity : AppCompatActivity() {
                 selectDate,
                 itemList[selectDate].size +1,
                 placeItem )
-            placeDB = FirebaseDatabase.getInstance().getReference("plans/${planItem.planID}")
+            placeDB = FirebaseDatabase.getInstance().getReference("plans/${planItem.planId}")
             placeDB.child("placeList/${placeItem.id}").setValue(tempItem)
             itemList[selectDate].add(tempItem)
             adapter.notifyDataSetChanged()

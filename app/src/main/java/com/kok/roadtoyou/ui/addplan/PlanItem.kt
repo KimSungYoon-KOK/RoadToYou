@@ -2,13 +2,14 @@ package com.kok.roadtoyou.ui.addplan
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.firebase.database.Exclude
 
 data class PlanItem(
-    var planID: String?,
+    var planId: String?,
     var planName: String?,
     var period: String?,
     var days: Int?,
-    var userId: List<String>?,
+    var userList: List<String>?,
     var placeList: List<AddPlaceItem>?
 ): Parcelable {
 
@@ -24,12 +25,24 @@ data class PlanItem(
 
     constructor(): this(null, null, null, null, null, null)
 
+    @Exclude
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "planId" to planId,
+            "planName" to planName,
+            "period" to period,
+            "days" to days,
+            "userList" to userList,
+            "placeList" to placeList
+        )
+    }
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(planID)
+        parcel.writeString(planId)
         parcel.writeString(planName)
         parcel.writeString(period)
         parcel.writeValue(days)
-        parcel.writeStringList(userId)
+        parcel.writeStringList(userList)
         parcel.writeTypedList(placeList)
     }
 

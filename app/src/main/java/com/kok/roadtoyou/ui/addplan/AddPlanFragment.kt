@@ -1,5 +1,6 @@
 package com.kok.roadtoyou.ui.addplan
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -15,11 +16,11 @@ import com.google.firebase.database.*
 import com.kok.roadtoyou.R
 import kotlinx.android.synthetic.main.fragment_add_plan.*
 import java.util.*
+import kotlin.collections.HashMap
 
 class AddPlanFragment : Fragment() {
 
-    lateinit var planDB: DatabaseReference
-    lateinit var userDB: DatabaseReference
+    lateinit var mDB: DatabaseReference
     private lateinit var days: List<Calendar>
 
     override fun onCreateView(
@@ -55,24 +56,25 @@ class AddPlanFragment : Fragment() {
                 //Add Firebase
                 val user = FirebaseAuth.getInstance().currentUser
                 if (user != null) {
-                    userDB = FirebaseDatabase.getInstance().getReference("users/${user.uid}")
-                    val key = userDB.child("planList").push().key!!
-                    userDB.child("planList/${key}").setValue(period)
-                    planDB = FirebaseDatabase.getInstance().getReference("plans")
-                    val item = PlanItem(
-                        key,
-                        period,     //planName: 임시로 period 저장
-                        period,
-                        days.size,
-                        listOf(user.uid),
-                        null
-                    )
-                    Log.d("Log_Plan_Info", item.toString())
-                    planDB.child(key).setValue(item)
+                    mDB = FirebaseDatabase.getInstance().reference
+                    val key = mDB.child("plans").push().key
+                    if (key == null) {
+                        Log.w(TAG, "Couldn't get push key for planList")
+                        return@setOnClickListener
+                    }
+
+                    val plan = PlanItem(key, period, period, days.size, listOf(user.uid), null)
+                    val planValues = plan.toMap()
+
+                    val childUpdates = HashMap<String, Any>()
+                    childUpdates["/plans/$key"] = planValues
+                    childUpdates["/users/${user.uid}/planList"] = planValues
+
+                    mDB.updateChildren(childUpdates)
 
                     val intent = Intent(activity, MakePlanActivity::class.java)
                     intent.putExtra("ACTIVITY_FLAG",1)
-                    intent.putExtra("PLAN_ITEM", item)
+                    intent.putExtra("PLAN_ITEM", plan)
                     startActivity(intent)
                 } else {
                     Log.e("NOT USER", "NOT CURRENT USER")
