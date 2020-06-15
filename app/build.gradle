@@ -71,6 +71,4 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.4'                         //Indicator
     implementation 'com.github.applikeysolutions:cosmocalendar:1.0.4'       //Calendar
 
-    //Gson
-    implementation 'com.google.code.gson:gson:2.8.5'
 }
