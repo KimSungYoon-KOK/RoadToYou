@@ -8,12 +8,9 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.gson.Gson
+import com.kok.roadtoyou.DataConverter
 import com.kok.roadtoyou.R
-import com.kok.roadtoyou.ui.addplan.AddPlaceItem
-import com.kok.roadtoyou.ui.addplan.PlanItem
 import com.kok.roadtoyou.ui.member.User
-import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.fragment_my_page.*
 import java.time.LocalDate
 
@@ -63,30 +60,16 @@ class MyPageFragment : Fragment() {
                     }
 
                     override fun onDataChange(p0: DataSnapshot) {
-                        //Log.d("Log_Plan_List_$i", p0.value.toString())
-                        val item = dataConverter_Plan(p0.value.toString())
+                        Log.d("Log_Plan_List_$i", p0.value.toString())
+                        val item = DataConverter().dataConverterPlan(p0.value.toString())
                         Log.d("Log_Plan_Item_$i", item.toString())
-                        if (dateCalculate(item.period!!)) itemList[0].add(item)
+                        if (DataConverter().dateCalculate(item.period!!)) itemList[0].add(item)
                         else itemList[1].add(item)
                         adapter.notifyDataSetChanged()
                     }
                 })
             }
         }
-    }
-
-    private fun dateCalculate(period: String): Boolean {
-        val now = LocalDate.now()
-        val temp = period.split(" - ")
-        val endDate = temp[1].split(".")
-        val date = if (endDate.size >= 3) {
-            LocalDate.of(endDate[0].toInt(), endDate[1].toInt(), endDate[2].toInt())
-        } else {
-            val year = temp[0].split(".")[0]
-            LocalDate.of(year.toInt(), endDate[0].toInt(), endDate[1].toInt())
-        }
-
-        return now <= date
     }
 
     private fun initUserInfo() {
@@ -101,7 +84,7 @@ class MyPageFragment : Fragment() {
                 }
                 override fun onDataChange(p0: DataSnapshot) {
                     //Log.d("Log_User_Info1",p0.value.toString())
-                    userInfo = dataConverter_User(p0.value.toString())
+                    userInfo = DataConverter().dataConverterUser(p0.value.toString())
                     Log.d("Log_User_Info2", userInfo.toString())
 
                     //user 프로필 사진
@@ -118,63 +101,4 @@ class MyPageFragment : Fragment() {
             })
         }
     }
-
-    private fun dataConverter_Plan(json: String): MyItem {
-        var planID = "planID="
-        val id_num = json.indexOf(planID)
-        planID = json.substring(id_num, (json.substring(id_num).indexOf(",")+id_num))
-        planID = planID.split("=")[1]
-
-        var planName = "planName="
-        val name_num = json.indexOf(planName)
-        planName = json.substring(name_num, (json.substring(name_num).indexOf(",")+name_num))
-        planName = planName.split("=")[1]
-
-        var period = "period="
-        val p_num = json.indexOf(period)
-        period = json.substring(p_num, (json.substring(p_num).indexOf(",")+p_num))
-        period = period.split("=")[1]
-
-        return MyItem(planID, planName, period)
-    }
-
-    //Database 에서 json 받아와서 User 객체에 다시 저장하는 함수
-    private fun dataConverter_User(json: String): User {
-        var uid = "uid="
-        val uid_num = json.indexOf(uid)
-        uid = json.substring(uid_num, (json.substring(uid_num).indexOf(",")+uid_num))
-        uid = uid.split("=")[1]
-
-        var name = "name="
-        val name_num = json.indexOf(name)
-        name = json.substring(name_num, (json.substring(name_num).indexOf(",")+name_num))
-        name = name.split("=")[1]
-
-        val planList = mutableListOf<String>()
-        var planStr = "planList={"
-        val plan_num = json.indexOf(planStr)
-        if (plan_num != -1) {
-            planStr = json.substring(plan_num, (json.substring(plan_num).indexOf("}") + plan_num))
-            planStr = planStr.split("={")[1]
-            val plans = planStr.split(", ")
-            for (i in plans.indices) {
-                planList.add(plans[i].split("=")[0])
-            }
-        }
-
-        val reviewList = mutableListOf<String>()
-        var reviewStr = "reviewList={"
-        val review_num = json.indexOf(reviewStr)
-        if (review_num != -1) {
-            reviewStr = json.substring(review_num, (json.substring(review_num).indexOf("}")+review_num))
-            reviewStr = reviewStr.split("={")[1]
-            val reviews = reviewStr.split(", ")
-            for (i in reviews.indices) {
-                reviewList.add(reviews[i].split("=")[0])
-            }
-        }
-
-        return User(uid, name, planList, reviewList)
-    }
-
 }

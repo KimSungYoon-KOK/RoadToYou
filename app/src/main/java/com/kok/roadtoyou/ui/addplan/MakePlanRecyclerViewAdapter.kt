@@ -46,8 +46,8 @@ class MakePlanRecyclerViewAdapter(var items: ArrayList<AddPlaceItem>)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.placeCount.text = items[position].count.toString()
-        holder.placeNm.text = items[position].placeInfo?.title
-        holder.placeType.text = when ( items[position].placeInfo?.type) {
+        holder.placeNm.text = items[position].title
+        holder.placeType.text = when ( items[position].type) {
             12 -> "관광지"
             14 -> "문화 시설"
             15 -> "행사/공연/축제"

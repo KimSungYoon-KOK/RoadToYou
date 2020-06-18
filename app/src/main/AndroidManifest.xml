@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kok.roadtoyou">
-    <!-- 지도 저장 권한 -->
+    <!-- 권한 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".App"
@@ -16,17 +19,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.review.RegisterReviewActivity"></activity>
+
         <!-- Google Play Service 버전 추가 -->
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" /> <!-- Google Map API 키 추가 -->
+            android:value="@integer/google_play_services_version" />
+        <!-- Google Map API 키 추가 -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCCeItObnu3LVd32UbVqJ-p9YrngB2vd8o" /> <!-- SearchView -->
+            android:value="AIzaSyCCeItObnu3LVd32UbVqJ-p9YrngB2vd8o" />
+        <!-- SearchView -->
         <meta-data
             android:name="android.app.searchable"
             android:resource="@xml/searchable" />
+
+        <!-- 카메라 내부 파일 접근 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.kok.roadtoyou"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
 
         <activity
             android:name=".SplashActivity"
@@ -50,11 +66,9 @@
         <activity
             android:name=".ui.addplan.MakePlanActivity"
             android:parentActivityName=".MainActivity" />
+        <activity android:name=".ui.review.RegisterReviewActivity"/>
         <activity
             android:name=".ui.review.ReviewActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".ui.mypage.SettingActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ui.search.SearchActivity"

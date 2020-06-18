@@ -62,14 +62,14 @@ class MyPageViewPagerAdapter(private val items: ArrayList<ArrayList<MyItem>>)
     fun goRegisterReview(data: MyItem) {
         val intent = Intent(context, RegisterReviewActivity::class.java)
         intent.putExtra("PLAN_ID", data.planId)
-        (context.applicationContext as MainActivity).startActivity(intent)
+        (context as MainActivity).startActivity(intent)
     }
 
     //리뷰 보기 페이지
     fun goReview(data: MyItem) {
         val intent = Intent(context, ReviewActivity::class.java)
         intent.putExtra("PLAN_ID", data.planId)
-        (context.applicationContext as MainActivity).startActivity(intent)
+        (context as MainActivity).startActivity(intent)
     }
 
 }

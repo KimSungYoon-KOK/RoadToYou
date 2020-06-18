@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.renderscript.Sampler
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -14,6 +13,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.database.*
+import com.kok.roadtoyou.DataConverter
 import com.kok.roadtoyou.R
 import com.kok.roadtoyou.ui.search.PlaceItem
 import com.kok.roadtoyou.ui.search.SearchActivity
@@ -27,7 +27,7 @@ class MakePlanActivity : AppCompatActivity() {
 
     lateinit var adapter: MakePlanViewPagerAdapter
     lateinit var planItem: PlanItem
-    var itemList = ArrayList<ArrayList<AddPlaceItem>>()
+    private var itemList = ArrayList<ArrayList<AddPlaceItem>>()
 
     lateinit var plansDB: DatabaseReference
 
@@ -44,8 +44,7 @@ class MakePlanActivity : AppCompatActivity() {
         if (intent.hasExtra("ACTIVITY_FLAG")) {
             //from AddPlanFragment
             planItem = intent.getParcelableExtra("PLAN_ITEM")!!
-            tv_plan_date.text = planItem.period
-            initViewPager()
+            initView()
         } else {
             //from MyPageFragment
             initPlan()
@@ -53,24 +52,19 @@ class MakePlanActivity : AppCompatActivity() {
     }
 
     private fun initPlan() {
-        //TODO: MyPageFragment에서 넘어와서 planID로 DB에 있는 PLANITEM 불러와야한다.
         val planID = intent.getStringExtra("PLAN_ID")
         plansDB = FirebaseDatabase.getInstance().getReference("plans")
         plansDB.orderByKey().equalTo(planID).addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
-                TODO("Not yet implemented")
+//                TODO("Not yet implemented")
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                val planItem = convertPlanItem(p0.value)
-                Log.d("Log_Query", p0.value.toString())
+                planItem = DataConverter().convertPlanItem(p0.value.toString())
+                Log.d("Log_Plan_Item",planItem.toString())
+                initView()
             }
-
         })
-    }
-
-    private fun convertPlanItem(item: String): PlanItem {
-
     }
 
     private fun initBtn() {
@@ -91,10 +85,19 @@ class MakePlanActivity : AppCompatActivity() {
         }
     }
 
-    private fun initViewPager() {
-        for (i in 0 until planItem.days!!){
+    private fun initView() {
+        tv_plan_date.text = planItem.period
+
+        itemList.clear()
+        for (i in 0 until planItem.days!!) {
             val temp = ArrayList<AddPlaceItem>()
             itemList.add(temp)
+        }
+        val placeList = planItem.placeList?.sortedWith(compareBy{ it.count })
+        if (placeList != null) {
+            for (i in placeList.indices) {
+                itemList[placeList[i].date!!].add(placeList[i])
+            }
         }
 
         adapter = MakePlanViewPagerAdapter(itemList)
@@ -133,12 +136,14 @@ class MakePlanActivity : AppCompatActivity() {
     //Firebase PlaceList 에 추가
     private fun uploadData(data: Intent?) {
         if (data != null) {
-            val placeItem = data.getParcelableExtra<PlaceItem>("PLACE_DATA")
+            val placeItem = data.getParcelableExtra<PlaceItem>("PLACE_DATA") ?: return
             val selectDate = viewpager_make_plan.currentItem
             val tempItem = AddPlaceItem(
                 selectDate,
                 itemList[selectDate].size +1,
-                placeItem )
+                placeItem.title,
+                placeItem.type
+            )
             plansDB = FirebaseDatabase.getInstance().getReference("plans/${planItem.planID}")
             plansDB.child("placeList/${placeItem.id}").setValue(tempItem)
             itemList[selectDate].add(tempItem)
@@ -147,6 +152,5 @@ class MakePlanActivity : AppCompatActivity() {
             Log.d("Error", "Data Intent is null")
         }
     }
-
 }
 

@@ -91,15 +91,16 @@ class SignInActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 if (it.isSuccessful) {  //로그인 성공
                     val user = auth.currentUser
+                    //Log.d("Log_User_Find_uid", user?.uid.toString())
                     //DB에 유저 정보 있는지 확인 하고 없으면 저장
                     val rdb = FirebaseDatabase.getInstance().getReference("users")
-                    rdb.orderByChild("uId").equalTo(user?.uid)
+                    rdb.child("/${user?.uid}")
                         .addListenerForSingleValueEvent( object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {
 //                                TODO("Not yet implemented")
                             }
-                            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                val userCheck = dataSnapshot.value
+                            override fun onDataChange(p0: DataSnapshot) {
+                                val userCheck = p0.value
                                 //Log.d("Log_User_Find", userCheck.toString())
                                 if (userCheck == null) {
                                     val userInfo = User(user?.uid, user?.displayName, null, null)

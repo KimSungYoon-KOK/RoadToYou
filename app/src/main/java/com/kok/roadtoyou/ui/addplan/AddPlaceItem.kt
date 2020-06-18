@@ -7,26 +7,31 @@ import com.kok.roadtoyou.ui.search.PlaceItem
 data class AddPlaceItem(
     var date: Int?,
     var count: Int?,
-    var placeInfo: PlaceItem?
+    var title: String?,
+    var type: Int?
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
-        parcel.readParcelable(PlaceItem::class.java.classLoader)
+        parcel.readString(),
+        parcel.readValue(Int::class.java.classLoader) as? Int
     ) {
     }
 
-    constructor(): this(null, null, null)
+    constructor(): this(null, null, null, null)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(date)
         parcel.writeValue(count)
-        parcel.writeParcelable(placeInfo, flags)
+        parcel.writeString(title)
+        parcel.writeValue(type)
     }
 
     override fun describeContents(): Int {
         return 0
     }
+
+
 
     companion object CREATOR : Parcelable.Creator<AddPlaceItem> {
         override fun createFromParcel(parcel: Parcel): AddPlaceItem {

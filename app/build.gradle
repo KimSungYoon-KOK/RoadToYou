@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.kok.roadtoyou"
-        minSdkVersion 26
+        minSdkVersion 28
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -71,6 +71,9 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.4'                         //Indicator
     implementation 'com.github.applikeysolutions:cosmocalendar:1.0.4'       //Calendar
 
-    //Gson
-    implementation 'com.google.code.gson:gson:2.8.5'
+    //해쉬 태그
+    implementation 'com.hootsuite.android:nachos:1.1.1'
+
+    //Permission Check
+    implementation 'gun0912.ted:tedpermission:2.0.0'
 }
