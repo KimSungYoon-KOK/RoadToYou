@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.renderscript.Sampler
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -12,8 +13,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.kok.roadtoyou.R
 import com.kok.roadtoyou.ui.search.PlaceItem
 import com.kok.roadtoyou.ui.search.SearchActivity
@@ -29,7 +29,7 @@ class MakePlanActivity : AppCompatActivity() {
     lateinit var planItem: PlanItem
     var itemList = ArrayList<ArrayList<AddPlaceItem>>()
 
-    lateinit var placeDB: DatabaseReference
+    lateinit var plansDB: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +41,7 @@ class MakePlanActivity : AppCompatActivity() {
         initMap()
         initBtn()
 
-        val flag = intent.getIntExtra("ACTIVITY_FLAG", -1)
-        if (flag == 1){
+        if (intent.hasExtra("ACTIVITY_FLAG")) {
             //from AddPlanFragment
             planItem = intent.getParcelableExtra("PLAN_ITEM")!!
             tv_plan_date.text = planItem.period
@@ -55,6 +54,23 @@ class MakePlanActivity : AppCompatActivity() {
 
     private fun initPlan() {
         //TODO: MyPageFragment에서 넘어와서 planID로 DB에 있는 PLANITEM 불러와야한다.
+        val planID = intent.getStringExtra("PLAN_ID")
+        plansDB = FirebaseDatabase.getInstance().getReference("plans")
+        plansDB.orderByKey().equalTo(planID).addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                val planItem = convertPlanItem(p0.value)
+                Log.d("Log_Query", p0.value.toString())
+            }
+
+        })
+    }
+
+    private fun convertPlanItem(item: String): PlanItem {
+
     }
 
     private fun initBtn() {
@@ -123,8 +139,8 @@ class MakePlanActivity : AppCompatActivity() {
                 selectDate,
                 itemList[selectDate].size +1,
                 placeItem )
-            placeDB = FirebaseDatabase.getInstance().getReference("plans/${planItem.planID}")
-            placeDB.child("placeList/${placeItem.id}").setValue(tempItem)
+            plansDB = FirebaseDatabase.getInstance().getReference("plans/${planItem.planID}")
+            plansDB.child("placeList/${placeItem.id}").setValue(tempItem)
             itemList[selectDate].add(tempItem)
             adapter.notifyDataSetChanged()
         } else {
