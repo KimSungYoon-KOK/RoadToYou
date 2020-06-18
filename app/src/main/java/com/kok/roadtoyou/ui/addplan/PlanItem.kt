@@ -8,7 +8,7 @@ data class PlanItem(
     var planName: String?,
     var period: String?,
     var days: Int?,
-    var userId: List<String>?,
+    var userList: List<String>?,
     var placeList: List<AddPlaceItem>?
 ): Parcelable {
 
@@ -29,7 +29,7 @@ data class PlanItem(
         parcel.writeString(planName)
         parcel.writeString(period)
         parcel.writeValue(days)
-        parcel.writeStringList(userId)
+        parcel.writeStringList(userList)
         parcel.writeTypedList(placeList)
     }
 
@@ -46,5 +46,6 @@ data class PlanItem(
             return arrayOfNulls(size)
         }
     }
+
 
 }

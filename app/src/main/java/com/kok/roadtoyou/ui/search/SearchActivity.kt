@@ -1,9 +1,7 @@
 package com.kok.roadtoyou.ui.search
 
-import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
-import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,7 +10,6 @@ import android.view.Menu
 import android.widget.SearchView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kok.roadtoyou.R
-import com.kok.roadtoyou.ui.addplan.MakePlanActivity
 import kotlinx.android.synthetic.main.activity_search.*
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
@@ -71,16 +68,16 @@ class SearchActivity : AppCompatActivity() {
 
     class MyAsyncTask(context: SearchActivity): AsyncTask<URL, Unit, Unit>() {
 
-        val activityreference = WeakReference(context)
+        private val activityReference = WeakReference(context)
 
         override fun doInBackground(vararg params: URL?): Unit {
-            val activity = activityreference.get()
+            val activity = activityReference.get()
             activity?.adapter?.itemList?.clear()
            for (i in 0..3)
                 activity?.adapter?.itemList?.add(ArrayList())
 
 
-            val doc = Jsoup.connect(params[0].toString()).parser(Parser.xmlParser()).get()
+            val doc = Jsoup.connect(params[0].toString()).timeout(10000).parser(Parser.xmlParser()).get()
             val items = doc.select("item")
             //val totalCount = doc.select("totalCount").text().toString().toInt()
             for (item in items) {
@@ -112,8 +109,7 @@ class SearchActivity : AppCompatActivity() {
                 Log.d("ITEM", tempItem.toString())
 
                 // ContentType : 관광지 12   /   문화시설 14 행사/공연/축제 15 레포츠 28    /   음식점 39   /   숙박 32
-                val contentType = tempItem.type
-                when(contentType) {
+                when(tempItem.type) {
                     12 -> activity?.adapter!!.itemList[0].add(tempItem)
                     39 -> activity?.adapter!!.itemList[2].add(tempItem)
                     32 -> activity?.adapter!!.itemList[3].add(tempItem)
@@ -124,7 +120,7 @@ class SearchActivity : AppCompatActivity() {
 
         override fun onPostExecute(result: Unit?) {
             super.onPostExecute(result)
-            val activity = activityreference.get()
+            val activity = activityReference.get()
             if (activity == null || activity.isFinishing)
                 return
             activity.adapter.notifyDataSetChanged()

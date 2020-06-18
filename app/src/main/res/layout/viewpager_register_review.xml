@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/tv_placeName"
+            android:textSize="24sp"
+            android:text="PLACE NAME"
+            android:textColor="@color/black"
+            android:layout_marginVertical="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/photoBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/ic_baseline_add_a_photo_24"
+            android:background="@drawable/ripple_effect_6_rectangular" />
+        <ImageButton
+            android:id="@+id/galleryBtn"
+            android:layout_marginHorizontal="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_baseline_add_photo_alternate_24"
+            android:background="@drawable/ripple_effect_6_rectangular" />
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/et_review"
+        android:hint="방문하신 장소는 어떠셨나요? 분위기나 서비스에 대해서도 알려주세요!!"
+        android:inputType="textMultiLine"
+        android:background="@drawable/border"
+        android:gravity="top"
+        android:lines="6"
+        android:minLines="6"
+        android:maxLines="8"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="5dp"
+        android:layout_weight="1" />
+
+    <com.hootsuite.nachos.NachoTextView
+        android:id="@+id/et_hashtag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="해시태그 추가하기"
+        android:background="@drawable/border"
+        android:padding="5dp"
+        app:chipHeight="30dp"
+        app:chipVerticalSpacing="3dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_register_review"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginVertical="20dp" />
+
+</LinearLayout>
