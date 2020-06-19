@@ -1,6 +1,8 @@
 package com.kok.roadtoyou.ui.review
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kok.roadtoyou.R
 
-class RegisterRecyclerViewAdapter(private val imgList: MutableList<String>)
+class RegisterRecyclerViewAdapter(private val imgList: ArrayList<String>)
     : RecyclerView.Adapter<RegisterRecyclerViewAdapter.ViewHolder>() {
 
     lateinit var context: Context
@@ -21,8 +23,8 @@ class RegisterRecyclerViewAdapter(private val imgList: MutableList<String>)
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val img: ImageView = itemView.findViewById(R.id.img)
-        private val cancelBtn: ImageButton = itemView.findViewById(R.id.cancelBtn)
+        val imageView: ImageView = itemView.findViewById(R.id.img)
+        private val cancelBtn: ImageView = itemView.findViewById(R.id.cancelBtn)
 
         init {
             cancelBtn.setOnClickListener {
@@ -43,9 +45,9 @@ class RegisterRecyclerViewAdapter(private val imgList: MutableList<String>)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val img = imgList[position]
-        Glide.with(context).load(img).thumbnail(0.1f)
-            .placeholder(R.drawable.ic_baseline_error_outline_24).into(holder.img)
+        Glide.with(context).load(imgList[position]).thumbnail(0.1f)
+            .placeholder(R.drawable.ic_baseline_error_outline_24)
+            .into(holder.imageView)
     }
 
 }

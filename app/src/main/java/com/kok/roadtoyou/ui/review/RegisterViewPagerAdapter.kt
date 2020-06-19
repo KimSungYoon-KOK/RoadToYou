@@ -1,18 +1,24 @@
 package com.kok.roadtoyou.ui.review
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hootsuite.nachos.NachoTextView
+import com.hootsuite.nachos.terminator.ChipTerminatorHandler
 import com.kok.roadtoyou.R
 
-class RegisterViewPagerAdapter(private val itemList: ArrayList<ReviewItem> )
+class RegisterViewPagerAdapter(private val itemList: ArrayList<ReviewItem>)
     :RecyclerView.Adapter<RegisterViewPagerAdapter.ViewHolder>() {
 
     lateinit var context: Context
@@ -41,6 +47,9 @@ class RegisterViewPagerAdapter(private val itemList: ArrayList<ReviewItem> )
                 itemClickListener?.addGalleryOnClick(it, adapterPosition)
             }
 
+            hashTag.addChipTerminator(' ', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_TO_TERMINATOR)
+            hashTag.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL)
+
         }
     }
 
@@ -60,16 +69,46 @@ class RegisterViewPagerAdapter(private val itemList: ArrayList<ReviewItem> )
 
         val layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         holder.recyclerView.layoutManager = layoutManager
-        if (itemList[position].imgList == null) itemList[position].imgList = mutableListOf()
+        if (itemList[position].imgList == null) itemList[position].imgList = ArrayList()
         adapter = RegisterRecyclerViewAdapter(itemList[position].imgList!!)
         adapter.itemClickListener = object: RegisterRecyclerViewAdapter.OnItemClickListener {
-            override fun cancelOnClick(view: View, position: Int) {
-                TODO("Not yet implemented")
+            override fun cancelOnClick(view: View, position2: Int) {
+                itemList[position].imgList!!.removeAt(position2)
+                adapter.notifyDataSetChanged()
             }
         }
         holder.recyclerView.adapter = adapter
 
-    }
+        holder.review.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+                itemList[position].review = p0.toString()
+            }
 
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                TODO("Not yet implemented")
+            }
+
+        })
+
+        holder.hashTag.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+                itemList[position].hashTags = holder.hashTag.chipAndTokenValues
+                //Log.d("Log_HashTag", itemList[position].hashTags.toString())
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                TODO("not implemented")
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                TODO("not implemented")
+            }
+        })
+
+    }
 
 }

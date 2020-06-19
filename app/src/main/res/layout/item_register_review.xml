@@ -3,19 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="55dp"
-    android:layout_height="55dp"
-    android:gravity="center">
-
-    <ImageButton
-        android:id="@+id/cancelBtn"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        app:srcCompat="@drawable/ic_baseline_cancel_24" />
+    android:layout_height="55dp">
 
     <ImageView
         android:id="@+id/img"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:scaleType="fitXY"/>
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        android:layout_centerInParent="true"/>
+
+    <ImageView
+        android:id="@+id/cancelBtn"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignParentRight="true"
+        app:srcCompat="@drawable/ic_baseline_cancel_24" />
 
 </RelativeLayout>

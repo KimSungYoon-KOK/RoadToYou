@@ -12,11 +12,12 @@ import com.kok.roadtoyou.DataConverter
 import com.kok.roadtoyou.R
 import com.kok.roadtoyou.ui.member.User
 import kotlinx.android.synthetic.main.fragment_my_page.*
-import java.time.LocalDate
 
 class MyPageFragment : Fragment() {
 
     private lateinit var mDatabase: DatabaseReference
+    private lateinit var planDB: DatabaseReference
+    private lateinit var reviewDB: DatabaseReference
     lateinit var userInfo: User
 
     lateinit var adapter: MyPageViewPagerAdapter
@@ -49,23 +50,43 @@ class MyPageFragment : Fragment() {
         }.attach()
     }
 
-    private fun initItemList() {
+    private fun initPlanList() {
         val planIdList = userInfo.planList
         if (planIdList != null) {
             for (i in planIdList.indices) {
-                mDatabase = FirebaseDatabase.getInstance().getReference("plans/${planIdList[i]}")
-                mDatabase.addListenerForSingleValueEvent(object : ValueEventListener {
+                planDB = FirebaseDatabase.getInstance().getReference("plans/${planIdList[i]}")
+                planDB.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onCancelled(p0: DatabaseError) {
 //                        TODO("Not yet implemented")
                     }
-
                     override fun onDataChange(p0: DataSnapshot) {
                         Log.d("Log_Plan_List_$i", p0.value.toString())
-                        val item = DataConverter().dataConverterPlan(p0.value.toString())
+                        val item = DataConverter().dataConvertMyItemFromPlan(p0.value.toString())
                         Log.d("Log_Plan_Item_$i", item.toString())
                         if (DataConverter().dateCalculate(item.period!!)) itemList[0].add(item)
                         else itemList[1].add(item)
+                        initReviewList()
                         adapter.notifyDataSetChanged()
+                    }
+                })
+            }
+        }
+    }
+
+    private fun initReviewList() {
+        val reviewIdList = userInfo.reviewList
+        if (reviewIdList != null) {
+            for (i in reviewIdList.indices) {
+                reviewDB = FirebaseDatabase.getInstance().getReference("reviews/${reviewIdList[i]}")
+                reviewDB.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onCancelled(p0: DatabaseError) {
+//                        TODO("Not yet implemented")
+                    }
+                    override fun onDataChange(p0: DataSnapshot) {
+                        Log.d("Log_Review_List_$i", p0.value.toString())
+                        val item = DataConverter().dataConvertMyItemFromReview(p0.value.toString())
+                        Log.d("Log_Review_Item_$i", item.toString())
+                        itemList[2].add(item)
                     }
                 })
             }
@@ -95,7 +116,7 @@ class MyPageFragment : Fragment() {
                     //User name
                     tv_userName.text = userInfo.name
 
-                    initItemList()
+                    initPlanList()
                     initViewPager()
                 }
             })

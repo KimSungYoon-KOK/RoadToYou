@@ -9,7 +9,7 @@ import java.time.LocalDate
 class DataConverter {
 
     //PlanItem 으로 변형
-    fun convertPlanItem(json: String): PlanItem {
+    fun dataConvertPlanItem(json: String): PlanItem {
 
         val id_num = json.indexOf("planID")
         var temp = json.substring(id_num).indexOf(",")
@@ -55,7 +55,8 @@ class DataConverter {
         return PlanItem(planID, planName, period, days, userId, placeList)
     }
 
-    fun dataConverterPlan(json: String): MyItem {
+    //PlanItem 에서 MyItem 으로 변형
+    fun dataConvertMyItemFromPlan(json: String): MyItem {
         var planID = "planID="
         val id_num = json.indexOf(planID)
         var temp = json.substring(id_num).indexOf(",")
@@ -76,7 +77,12 @@ class DataConverter {
         return MyItem(planID, planName, period)
     }
 
-    //Database 에서 json 받아와서 User 객체에 다시 저장하는 함수
+    //ReviewItem 에서 ReviewItem 으로 변형
+    fun dataConvertMyItemFromReview(json: String): MyItem {
+        //TODO:DATA CONVERT
+    }
+
+    //User 로 변형
     fun dataConverterUser(json: String): User {
         var uid = "uid="
         val uid_num = json.indexOf(uid)

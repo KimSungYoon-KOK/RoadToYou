@@ -42,6 +42,15 @@
             android:background="@drawable/ripple_effect_6_rectangular" />
     </LinearLayout>
 
+    <com.hootsuite.nachos.NachoTextView
+        android:id="@+id/et_hashtag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="해시태그 추가하기"
+        android:background="@drawable/border"
+        android:padding="5dp"
+        app:chipHeight="30dp"
+        app:chipVerticalSpacing="3dp" />
 
     <EditText
         android:id="@+id/et_review"
@@ -56,18 +65,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:padding="5dp"
-        android:layout_weight="1" />
-
-    <com.hootsuite.nachos.NachoTextView
-        android:id="@+id/et_hashtag"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:hint="해시태그 추가하기"
-        android:background="@drawable/border"
-        android:padding="5dp"
-        app:chipHeight="30dp"
-        app:chipVerticalSpacing="3dp" />
+        android:layout_weight="1"
+        android:layout_marginTop="15dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_register_review"

@@ -60,7 +60,7 @@ class MakePlanActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                planItem = DataConverter().convertPlanItem(p0.value.toString())
+                planItem = DataConverter().dataConvertPlanItem(p0.value.toString())
                 Log.d("Log_Plan_Item",planItem.toString())
                 initView()
             }

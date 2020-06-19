@@ -76,4 +76,8 @@ dependencies {
 
     //Permission Check
     implementation 'gun0912.ted:tedpermission:2.0.0'
+
+    //Image Picker
+    implementation 'com.github.esafirm.android-image-picker:imagepicker:2.3.0'      // for experimental rx picker
+    implementation 'com.github.esafirm.android-image-picker:rximagepicker:2.3.0'    // If you have a problem with Glide, please use the same Glide version or simply open an issue
 }

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kok.roadtoyou.R
-import com.kok.roadtoyou.ui.addplan.PlanItem
 
 class MyPageRecyclerViewAdapter(var items: ArrayList<MyItem>)
     : RecyclerView.Adapter<MyPageRecyclerViewAdapter.ViewHolder>() {
@@ -39,7 +38,7 @@ class MyPageRecyclerViewAdapter(var items: ArrayList<MyItem>)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.planName.text = items[position].planName
+        holder.planName.text = items[position].name
         holder.planPeriod.text = items[position].period
     }
 

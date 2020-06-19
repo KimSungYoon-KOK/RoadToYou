@@ -1,7 +1,7 @@
 package com.kok.roadtoyou.ui.review
 
+import android.graphics.Bitmap
 import com.google.android.gms.maps.model.LatLng
-import com.kok.roadtoyou.ui.addplan.AddPlaceItem
 
 data class ReviewSummary(
     var list:ArrayList<LatLng>
@@ -15,9 +15,9 @@ data class ReviewInfo(
 
 data class ReviewItem(
     val placeName: String?,
-    val review: List<String>?,
-    val hashTags: List<String>?,
-    var imgList: MutableList<String>?
+    var review: String?,
+    var hashTags: List<String>?,
+    var imgList: ArrayList<String>?
 ){
     constructor(): this(null, null, null, null)
 }
