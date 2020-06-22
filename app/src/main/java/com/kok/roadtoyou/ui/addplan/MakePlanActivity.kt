@@ -142,6 +142,7 @@ class MakePlanActivity : AppCompatActivity() {
                 selectDate,
                 itemList[selectDate].size +1,
                 placeItem.title,
+                placeItem.id,
                 placeItem.type
             )
             plansDB = FirebaseDatabase.getInstance().getReference("plans/${planItem.planID}")

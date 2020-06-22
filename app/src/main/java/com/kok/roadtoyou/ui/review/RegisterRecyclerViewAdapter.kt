@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kok.roadtoyou.R
 
-class RegisterRecyclerViewAdapter(private val imgList: ArrayList<String>)
+class RegisterRecyclerViewAdapter(private val imgList: MutableList<String>)
     : RecyclerView.Adapter<RegisterRecyclerViewAdapter.ViewHolder>() {
 
     lateinit var context: Context

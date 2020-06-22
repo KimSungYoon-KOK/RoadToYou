@@ -22,7 +22,6 @@ class AddPlanFragment : Fragment() {
     lateinit var userDB: DatabaseReference
 
     private lateinit var days: List<Calendar>
-    private var planIdList = mutableListOf<String>()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -116,7 +115,4 @@ class AddPlanFragment : Fragment() {
         }
     }
 
-    private fun getPlanList() {
-
-    }
 }

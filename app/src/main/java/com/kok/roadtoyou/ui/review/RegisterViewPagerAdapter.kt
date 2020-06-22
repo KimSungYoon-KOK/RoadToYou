@@ -28,7 +28,6 @@ class RegisterViewPagerAdapter(private val itemList: ArrayList<ReviewItem>)
     interface OnItemClickListener {
         fun addPhotoOnClick(view: View, position: Int)
         fun addGalleryOnClick(view:View, position: Int)
-        fun hash(tag: String, position: Int)
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

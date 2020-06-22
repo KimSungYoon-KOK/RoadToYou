@@ -4,6 +4,8 @@ import com.kok.roadtoyou.ui.addplan.AddPlaceItem
 import com.kok.roadtoyou.ui.addplan.PlanItem
 import com.kok.roadtoyou.ui.member.User
 import com.kok.roadtoyou.ui.mypage.MyItem
+import com.kok.roadtoyou.ui.review.ReviewInfo
+import com.kok.roadtoyou.ui.review.ReviewItem
 import java.time.LocalDate
 
 class DataConverter {
@@ -47,7 +49,7 @@ class DataConverter {
                 for (j in ttemp.indices) {
                     ttemp[j] = ttemp[j].split("=")[1]
                 }
-                val item = AddPlaceItem(ttemp[0].toInt(), ttemp[1].toInt(), ttemp[2], ttemp[3].toInt())
+                val item = AddPlaceItem(ttemp[0].toInt(), ttemp[1].toInt(), ttemp[3], ttemp[2].toInt(), ttemp[4].toInt())
                 placeList.add(item)
             }
         }
@@ -79,8 +81,118 @@ class DataConverter {
 
     //ReviewItem 에서 ReviewItem 으로 변형
     fun dataConvertMyItemFromReview(json: String): MyItem {
-        //TODO:DATA CONVERT
+        val r_num = json.indexOf("reviewId=")
+        var reviewId = json.substring(r_num, (json.substring(r_num).indexOf(", ")+r_num))
+        reviewId = reviewId.split("=")[1]
+
+        var reviewName = "reviewName="
+        val name_num = json.indexOf(reviewName)
+        reviewName = json.substring(name_num, (json.substring(name_num).indexOf(",")+name_num))
+        reviewName = reviewName.split("=")[1]
+
+        var period = "period="
+        val p_num = json.indexOf(period)
+        period = json.substring(p_num, (json.substring(p_num).indexOf(",")+p_num))
+        period = period.split("=")[1]
+
+        return MyItem(reviewId, reviewName, period)
     }
+
+    fun dataConverterReviewInfo(json: String): ReviewInfo {
+        val name_num = json.indexOf("reviewName")
+        var reviewName = json.substring(name_num, (json.substring(name_num).indexOf(",")+name_num))
+        reviewName = reviewName.split("=")[1]
+
+        val p_num = json.indexOf("period")
+        var period = json.substring(p_num, (json.substring(p_num).indexOf(",")+p_num))
+        period = period.split("=")[1]
+
+        val rid_num = json.indexOf("reviewId")
+        var reviewId = json.substring(rid_num, (json.substring(rid_num).indexOf(",")+rid_num))
+        reviewId = reviewId.split("=")[1]
+
+        val img_num = json.indexOf("coverImg")
+        var coverImg = json.substring(img_num, (json.substring(img_num).indexOf(",")+img_num))
+        coverImg = coverImg.split("=")[1]
+
+        val uid_num = json.indexOf("userId")
+        var userId = json.substring(uid_num, (json.substring(uid_num).indexOf("}")+uid_num))
+        userId = userId.split("=")[1]
+
+        val reviewList = mutableListOf<ReviewItem>()
+        val list_num = json.indexOf("reviewList")
+        var tempList = json.substring(list_num, (json.substring(list_num).indexOf("}],")+list_num))
+        tempList = tempList.split("reviewList=[")[1]
+        val list = tempList.split("},").toMutableList()
+        for (i in list.indices) {
+            list[i] += "}"
+            println(list[i].toString())
+            reviewList.add(reviewItemConverter(list[i]))
+        }
+
+
+        return ReviewInfo(reviewName, period, reviewId, coverImg, userId, reviewList)
+    }
+
+    fun reviewItemConverter(json: String): ReviewItem {
+
+        val pname_num = json.indexOf("placeName")
+        var placeName:String
+        if (json.substring(pname_num).indexOf(",") != -1) {
+            placeName = json.substring(pname_num, (json.substring(pname_num).indexOf(",")+pname_num))
+            placeName = placeName.split("=")[1]
+        } else {
+            placeName = json.substring(pname_num, (json.substring(pname_num).indexOf("}")+pname_num))
+            placeName = placeName.split("=")[1]
+        }
+
+
+        val pid_num = json.indexOf("placeId")
+        var placeId = ""
+        if (json.substring(pid_num).indexOf(",") == -1) {
+            placeId = json.substring(pid_num, (json.substring(pid_num).indexOf("}")+pid_num))
+            placeId = placeId.split("=")[1]
+        } else {
+            placeId = json.substring(pid_num, (json.substring(pid_num).indexOf(",")+pid_num))
+            placeId = placeId.split("=")[1]
+        }
+
+
+        var review: String?
+        val str_num = json.indexOf("review=")
+        if (str_num != -1) {
+            review = json.substring(str_num, (json.substring(str_num).indexOf("^^&**!@,")+str_num))
+            review = review.split("=")[1]
+        } else {
+            review = null
+        }
+
+
+        val hashTags: List<String>?
+        val tag_num = json.indexOf("hashTags")
+        if (tag_num != -1) {
+            var tags = json.substring(tag_num, (json.substring(tag_num).indexOf("], ")+tag_num))
+            tags = tags.split("=[")[1]
+            hashTags = tags.split(", ")
+        } else {
+            hashTags = null
+        }
+
+        val imgList = mutableListOf<String>()
+        val img_num = json.indexOf("imgList=[")
+        if (img_num != -1) {
+            var imgs = json.substring(img_num, (json.substring(img_num).indexOf("]")+img_num))
+            imgs = imgs.split("=[")[1]
+            val temp = imgs.split(", ")
+            for (i in temp.indices) {
+                imgList.add(temp[i])
+            }
+        }
+
+        return ReviewItem(placeName, placeId.toInt(), review, hashTags, imgList)
+    }
+
+
 
     //User 로 변형
     fun dataConverterUser(json: String): User {

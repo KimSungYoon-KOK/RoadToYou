@@ -65,7 +65,6 @@ class MyPageFragment : Fragment() {
                         Log.d("Log_Plan_Item_$i", item.toString())
                         if (DataConverter().dateCalculate(item.period!!)) itemList[0].add(item)
                         else itemList[1].add(item)
-                        initReviewList()
                         adapter.notifyDataSetChanged()
                     }
                 })
@@ -87,6 +86,7 @@ class MyPageFragment : Fragment() {
                         val item = DataConverter().dataConvertMyItemFromReview(p0.value.toString())
                         Log.d("Log_Review_Item_$i", item.toString())
                         itemList[2].add(item)
+                        adapter.notifyDataSetChanged()
                     }
                 })
             }
@@ -117,6 +117,7 @@ class MyPageFragment : Fragment() {
                     tv_userName.text = userInfo.name
 
                     initPlanList()
+                    initReviewList()
                     initViewPager()
                 }
             })

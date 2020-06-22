@@ -2,6 +2,8 @@ package com.kok.roadtoyou.ui.review
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -13,6 +15,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import com.esafirm.imagepicker.features.ImagePicker
@@ -87,13 +91,13 @@ class RegisterReviewActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                //Log.d("Log_Plan_Item_RegisterReview_before", p0.value.toString())
+                Log.d("Log_Plan_Item_RegisterReview_before", p0.value.toString())
                 planItem = DataConverter().dataConvertPlanItem(p0.value.toString())
                 Log.d("Log_Plan_Item_RegisterReview",planItem.toString())
                 if (planItem.placeList != null) {
                     for (i in planItem.placeList!!.indices) {
                         val item = planItem.placeList!![i]
-                        reviewList.add(ReviewItem(item.title, null, null, null))
+                        reviewList.add(ReviewItem(item.title, item.id,null, null, null))
                     }
                 }
                 initView()
@@ -120,10 +124,6 @@ class RegisterReviewActivity : AppCompatActivity() {
                     imagePicker.start()
                 }
             }
-
-            override fun hash(tag: String, position: Int) {
-                TODO("Not yet implemented")
-            }
         }
         viewpager_register_review.adapter = adapter
 
@@ -134,21 +134,35 @@ class RegisterReviewActivity : AppCompatActivity() {
             tabLayout_register_review.tabMode = TabLayout.MODE_SCROLLABLE
     }
 
-    private fun uploadReview() {
+    private fun uploadReview(firstImgIndex: Int) {
 
-        Log.d("Log_Review_List", reviewList.toString())
+        val editText = EditText(this)
+        val builder = AlertDialog.Builder(this)
+            .setTitle("리뷰 제목을 입력해 주세요")
+            .setView(editText)
+            .setPositiveButton("확인") { _, _ ->
+                val title = editText.text.toString()
+                if (title.length < 2) {
+                    Toast.makeText(this, "제목은 두 글자 이상 입력해주세요", Toast.LENGTH_SHORT).show()
+                } else {
+                    val user = FirebaseAuth.getInstance().currentUser
+                    if (user != null) {
+                        userDB = FirebaseDatabase.getInstance().getReference("users/${user.uid}")
+                        val key = userDB.child("reviewList").push().key!!
+                        userDB.child("reviewList/${key}").setValue(title)
 
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user != null) {
-            userDB = FirebaseDatabase.getInstance().getReference("users/${user.uid}")
-            val key = userDB.child("reviewList").push().key!!
-            userDB.child("reviewList/${key}").setValue(planItem.planName)
-            reviewDB = FirebaseDatabase.getInstance().getReference("reviews")
-            reviewDB.child(key).setValue(reviewList)
-            finish()
-        } else {
-            Log.e("NOT USER", "NOT CURRENT USER")
-        }
+                        val reviewInfo = ReviewInfo(title, planItem.period!!, key,
+                            reviewList[firstImgIndex].imgList!![0], user.uid, reviewList)
+                        reviewDB = FirebaseDatabase.getInstance().getReference("reviews")
+                        reviewDB.child("/$key").setValue(reviewInfo)
+                        finish()
+                    } else {
+                        Log.e("NOT USER", "NOT CURRENT USER")
+                    }
+                }
+            }
+            .setNegativeButton("취소") { _, _ -> }
+        builder.create().show()
     }
 
 
@@ -286,7 +300,18 @@ class RegisterReviewActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_save -> {
-                uploadReview()
+                var firstImgIndex = -1
+                for (i in reviewList.indices) {
+                    reviewList[i].review += "^^&**!@"
+                    if (reviewList[i].imgList != null && reviewList[i].imgList!!.isNotEmpty()) {
+                        firstImgIndex = i
+                    }
+                }
+                if (firstImgIndex < 0) {
+                    Toast.makeText(this, "사진은 한 장 이상 꼭 있어야 합니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    uploadReview(firstImgIndex)
+                }
             }
         }
         return super.onOptionsItemSelected(item)

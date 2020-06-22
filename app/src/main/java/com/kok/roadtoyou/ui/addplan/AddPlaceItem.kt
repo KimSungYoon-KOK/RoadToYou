@@ -8,30 +8,32 @@ data class AddPlaceItem(
     var date: Int?,
     var count: Int?,
     var title: String?,
+    var id: Int?,
     var type: Int?
 ): Parcelable {
+
     constructor(parcel: Parcel) : this(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
+        parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int
     ) {
     }
 
-    constructor(): this(null, null, null, null)
+    constructor(): this(null, null, null, null, null)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(date)
         parcel.writeValue(count)
         parcel.writeString(title)
+        parcel.writeValue(id)
         parcel.writeValue(type)
     }
 
     override fun describeContents(): Int {
         return 0
     }
-
-
 
     companion object CREATOR : Parcelable.Creator<AddPlaceItem> {
         override fun createFromParcel(parcel: Parcel): AddPlaceItem {
@@ -42,4 +44,5 @@ data class AddPlaceItem(
             return arrayOfNulls(size)
         }
     }
+
 }
