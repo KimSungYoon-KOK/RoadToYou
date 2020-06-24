@@ -135,6 +135,10 @@ class DataConverter {
 
     fun reviewItemConverter(json: String, index: Int): ReviewItem {
 
+        if (index == 0) {
+            return ReviewItem(0, null, null, null, null, null)
+        }
+
         val pname_num = json.indexOf("placeName")
         var placeName:String
         if (json.substring(pname_num).indexOf(",") != -1) {
@@ -188,11 +192,7 @@ class DataConverter {
             }
         }
 
-        return if (index == 0) {
-            ReviewItem(0, placeName, placeId.toInt(), review, hashTags, imgList)
-        } else {
-            ReviewItem(1, placeName, placeId.toInt(), review, hashTags, imgList)
-        }
+        return ReviewItem(1, placeName, placeId.toInt(), review, hashTags, imgList)
     }
 
 

@@ -130,7 +130,7 @@ class ReviewViewPagerAdapter (
                 }
 
                 holder.review_hashtag.text = hashTagStr
-                holder.review_content.text = data.review
+                holder.review_content.text = data.review!!.split("^^&**!@")[0]
                 holder.indicator.setViewPager(holder.review_img)
 
                 // Bottom Sheet
@@ -161,12 +161,7 @@ class ReviewViewPagerAdapter (
         private val adapterReference = WeakReference(adapter)
 
         override fun doInBackground(vararg params: URL?): PlaceInfo {
-            val mAdapter = adapterReference.get()
             val doc = Jsoup.connect(params[0].toString()).parser(Parser.xmlParser()).get()
-
-//            mAdapter?.lat = doc.select("mapy").text().toDouble()
-//            mAdapter?.lng = doc.select("mapx").text().toDouble()
-//            mAdapter?.location = doc.select("addr1").text()
 
             val lat = doc.select("mapy").text().toDouble()
             val lng = doc.select("mapx").text().toDouble()
