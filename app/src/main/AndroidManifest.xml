@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.review.ReviewInfoActivity"></activity>
+        <activity android:name=".ui.register_review.ReviewInfoActivity"></activity>
         <!-- Google Play Service 버전 추가 -->
         <meta-data
             android:name="com.google.android.gms.version"
@@ -63,7 +63,7 @@
             android:name=".ui.addplan.MakePlanActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".ui.review.RegisterReviewActivity"
+            android:name=".ui.register_review.RegisterReviewActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".ui.review.ReviewActivity"

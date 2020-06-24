@@ -1,4 +1,4 @@
-package com.kok.roadtoyou.ui.review
+package com.kok.roadtoyou.ui.register_review
 
 data class ReviewInfo(
     val reviewName:String,

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kok.roadtoyou.MainActivity
 import com.kok.roadtoyou.R
 import com.kok.roadtoyou.ui.addplan.MakePlanActivity
-import com.kok.roadtoyou.ui.review.RegisterReviewActivity
+import com.kok.roadtoyou.ui.register_review.RegisterReviewActivity
 import com.kok.roadtoyou.ui.review.ReviewActivity
 
 class MyPageViewPagerAdapter(private val items: ArrayList<ArrayList<MyItem>>)

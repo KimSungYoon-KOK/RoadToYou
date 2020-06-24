@@ -1,9 +1,8 @@
-package com.kok.roadtoyou.ui.review
+package com.kok.roadtoyou.ui.register_review
 
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri

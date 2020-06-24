@@ -4,8 +4,8 @@ import com.kok.roadtoyou.ui.addplan.AddPlaceItem
 import com.kok.roadtoyou.ui.addplan.PlanItem
 import com.kok.roadtoyou.ui.member.User
 import com.kok.roadtoyou.ui.mypage.MyItem
-import com.kok.roadtoyou.ui.review.ReviewInfo
-import com.kok.roadtoyou.ui.review.ReviewItem
+import com.kok.roadtoyou.ui.register_review.ReviewInfo
+import com.kok.roadtoyou.ui.register_review.ReviewItem
 import java.time.LocalDate
 
 class DataConverter {

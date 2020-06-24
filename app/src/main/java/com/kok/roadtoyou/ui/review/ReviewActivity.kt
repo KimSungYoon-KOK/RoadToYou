@@ -3,9 +3,12 @@ package com.kok.roadtoyou.ui.review
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.widget.Toast
 import com.google.firebase.database.*
 import com.kok.roadtoyou.DataConverter
 import com.kok.roadtoyou.R
+import com.kok.roadtoyou.ui.register_review.ReviewInfo
 
 class ReviewActivity : AppCompatActivity() {
 
@@ -15,7 +18,14 @@ class ReviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_review)
+        initView()
         initData()
+    }
+
+    private fun initView() {
+        val toast = Toast.makeText(this, "좌우로 드래그 하세요", Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.TOP, 0, 50)
+        toast.show()
     }
 
     private fun initData() {

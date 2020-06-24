@@ -1,12 +1,9 @@
-package com.kok.roadtoyou.ui.review
+package com.kok.roadtoyou.ui.register_review
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
