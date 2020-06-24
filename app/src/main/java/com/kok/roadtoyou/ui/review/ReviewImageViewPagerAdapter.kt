@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kok.roadtoyou.R
 
-class ReviewImageViewPagerAdapter (private val itemList:List<String>)
+class ReviewImageViewPagerAdapter (private val itemList:MutableList<String>)
     : RecyclerView.Adapter<ReviewImageViewPagerAdapter.ViewHolder>(){
 
     lateinit var context: Context

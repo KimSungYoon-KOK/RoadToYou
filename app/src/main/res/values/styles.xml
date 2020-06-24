@@ -16,8 +16,8 @@
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
-    <!-- Login theme. -->
-    <style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- No ActionBar theme. -->
+    <style name="noActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

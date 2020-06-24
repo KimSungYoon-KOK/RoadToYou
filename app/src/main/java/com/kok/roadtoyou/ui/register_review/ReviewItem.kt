@@ -12,11 +12,12 @@ data class ReviewInfo(
 }
 
 data class ReviewItem(
+    val viewType: Int,
     val placeName: String?,
     val placeId: Int?,
     var review: String?,
     var hashTags: List<String>?,
     var imgList: MutableList<String>?
 ) {
-    constructor(): this(null, null, null, null, null)
+    constructor(): this(1,null, null, null, null, null)
 }

@@ -15,7 +15,7 @@ import com.hootsuite.nachos.NachoTextView
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler
 import com.kok.roadtoyou.R
 
-class RegisterViewPagerAdapter(private val itemList: ArrayList<ReviewItem>)
+class RegisterViewPagerAdapter(private val itemList: MutableList<ReviewItem>)
     :RecyclerView.Adapter<RegisterViewPagerAdapter.ViewHolder>() {
 
     lateinit var context: Context

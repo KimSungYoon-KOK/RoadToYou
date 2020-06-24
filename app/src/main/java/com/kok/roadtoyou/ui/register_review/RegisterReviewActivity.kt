@@ -45,8 +45,7 @@ class RegisterReviewActivity : AppCompatActivity() {
 
     lateinit var adapter: RegisterViewPagerAdapter
     lateinit var planItem: PlanItem
-    var reviewList = ArrayList<ReviewItem>()
-//    private var imageList = ArrayList<ArrayList<String>>()
+    var reviewList = mutableListOf<ReviewItem>()
 
     // 카메라 & 갤러리
     lateinit var imagePicker: ImagePicker
@@ -96,7 +95,7 @@ class RegisterReviewActivity : AppCompatActivity() {
                 if (planItem.placeList != null) {
                     for (i in planItem.placeList!!.indices) {
                         val item = planItem.placeList!![i]
-                        reviewList.add(ReviewItem(item.title, item.id,null, null, null))
+                        reviewList.add(ReviewItem(1, item.title, item.id,null, null, null))
                     }
                 }
                 initView()
@@ -150,6 +149,8 @@ class RegisterReviewActivity : AppCompatActivity() {
                         val key = userDB.child("reviewList").push().key!!
                         userDB.child("reviewList/${key}").setValue(title)
 
+                        //Cover Page 추가
+                        reviewList.add(0, ReviewItem(0, null, null, null, null, null))
                         val reviewInfo = ReviewInfo(title, planItem.period!!, key,
                             reviewList[firstImgIndex].imgList!![0], user.uid, reviewList)
                         reviewDB = FirebaseDatabase.getInstance().getReference("reviews")
@@ -301,13 +302,27 @@ class RegisterReviewActivity : AppCompatActivity() {
             R.id.action_save -> {
                 var firstImgIndex = -1
                 for (i in reviewList.indices) {
-                    reviewList[i].review += "^^&**!@"
-                    if (reviewList[i].imgList != null && reviewList[i].imgList!!.isNotEmpty()) {
-                        firstImgIndex = i
+                    //리뷰 글이 있을 때,
+                    if (!reviewList[i].review.isNullOrEmpty() && !reviewList[i].review.equals("null")) {
+                        reviewList[i].review += "^^&**!@"
+                        if (reviewList[i].imgList != null && reviewList[i].imgList!!.isNotEmpty()) {
+                            firstImgIndex = i
+                        } else {
+                            Toast.makeText(this, "리뷰를 작성한 장소는 사진이 한 장 이상 꼭 있어야 합니다.", Toast.LENGTH_SHORT).show()
+                            return false
+                        }
+                    } else {  //리뷰 글이 없을 때,
+                        if (reviewList[i].imgList != null && reviewList[i].imgList!!.isNotEmpty()) {
+                            Toast.makeText(this, "사진을 첨부한 장소는 리뷰가 꼭 있어야 합니다.", Toast.LENGTH_SHORT).show()
+                            return false
+                        } else {    //리뷰 글도 없고 사진도 없을 때,
+                            Toast.makeText(this, "리뷰를 모두 작성해주세요.", Toast.LENGTH_SHORT).show()
+                            return false
+                        }
                     }
                 }
                 if (firstImgIndex < 0) {
-                    Toast.makeText(this, "사진은 한 장 이상 꼭 있어야 합니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "장소마다 사진은 한 장 이상 꼭 있어야 합니다.", Toast.LENGTH_SHORT).show()
                 } else {
                     uploadReview(firstImgIndex)
                 }

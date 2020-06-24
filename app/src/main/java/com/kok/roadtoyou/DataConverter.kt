@@ -126,15 +126,14 @@ class DataConverter {
         val list = tempList.split("},").toMutableList()
         for (i in list.indices) {
             list[i] += "}"
-            println(list[i].toString())
-            reviewList.add(reviewItemConverter(list[i]))
+            reviewList.add(reviewItemConverter(list[i], i))
         }
 
 
         return ReviewInfo(reviewName, period, reviewId, coverImg, userId, reviewList)
     }
 
-    fun reviewItemConverter(json: String): ReviewItem {
+    fun reviewItemConverter(json: String, index: Int): ReviewItem {
 
         val pname_num = json.indexOf("placeName")
         var placeName:String
@@ -189,7 +188,11 @@ class DataConverter {
             }
         }
 
-        return ReviewItem(placeName, placeId.toInt(), review, hashTags, imgList)
+        return if (index == 0) {
+            ReviewItem(0, placeName, placeId.toInt(), review, hashTags, imgList)
+        } else {
+            ReviewItem(1, placeName, placeId.toInt(), review, hashTags, imgList)
+        }
     }
 
 
