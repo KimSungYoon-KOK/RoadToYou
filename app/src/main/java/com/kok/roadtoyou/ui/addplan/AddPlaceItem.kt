@@ -2,14 +2,16 @@ package com.kok.roadtoyou.ui.addplan
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.android.gms.maps.model.LatLng
 import com.kok.roadtoyou.ui.search.PlaceItem
 
 data class AddPlaceItem(
-    var date: Int?,
-    var count: Int?,
-    var title: String?,
-    var id: Int?,
-    var type: Int?
+    var date: Int?,     //0
+    var count: Int?,    //1
+    var title: String?, //3
+    var id: Int?,       //2
+    var type: Int?,     //4
+    var latLng: String? //5
 ): Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -17,11 +19,12 @@ data class AddPlaceItem(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
         parcel.readValue(Int::class.java.classLoader) as? Int,
-        parcel.readValue(Int::class.java.classLoader) as? Int
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readString()
     ) {
     }
 
-    constructor(): this(null, null, null, null, null)
+    constructor(): this(null, null, null, null, null, null)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeValue(date)
@@ -29,6 +32,7 @@ data class AddPlaceItem(
         parcel.writeString(title)
         parcel.writeValue(id)
         parcel.writeValue(type)
+        parcel.writeString(latLng)
     }
 
     override fun describeContents(): Int {
@@ -44,5 +48,4 @@ data class AddPlaceItem(
             return arrayOfNulls(size)
         }
     }
-
 }

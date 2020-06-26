@@ -1,5 +1,6 @@
 package com.kok.roadtoyou.ui.home
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,13 +8,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.kok.roadtoyou.R
+import com.kok.roadtoyou.ui.register_review.ReviewInfo
 
-class HomeAdapter(options: FirebaseRecyclerOptions<HomeItem>):
-    FirebaseRecyclerAdapter<HomeItem, HomeAdapter.ViewHolder>(options) {
+class HomeAdapter(options: FirebaseRecyclerOptions<ReviewInfo>):
+    FirebaseRecyclerAdapter<ReviewInfo, HomeAdapter.ViewHolder>(options) {
 
+    lateinit var context: Context
     var itemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
@@ -23,22 +27,15 @@ class HomeAdapter(options: FirebaseRecyclerOptions<HomeItem>):
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var thumbnail: ImageView
-        var item_title: TextView
-        var item_content: TextView
-        var favorites: TextView         //좋아요 수
-        var userID: TextView
-        var favoriteBtn: ToggleButton
-        var clipBtn: ImageView
+        var thumbnail: ImageView = itemView.findViewById(R.id.item_img)
+        var title: TextView = itemView.findViewById(R.id.item_title)
+        var period: TextView = itemView.findViewById(R.id.item_period)
+        var favorites: TextView = itemView.findViewById(R.id.favorites)         //좋아요 수
+        var userID: TextView = itemView.findViewById(R.id.userID)
+        var favoriteBtn: ToggleButton = itemView.findViewById(R.id.favoriteBtn)
+        var clipBtn: ImageView = itemView.findViewById(R.id.clipBtn)
 
         init {
-            item_title = itemView.findViewById(R.id.item_title)
-            thumbnail = itemView.findViewById(R.id.item_img)
-            item_content = itemView.findViewById(R.id.item_content)
-            favorites = itemView.findViewById(R.id.favorites)
-            userID = itemView.findViewById(R.id.userID)
-            favoriteBtn = itemView.findViewById(R.id.favoriteBtn)
-            clipBtn = itemView.findViewById(R.id.clipBtn)
 
             //리뷰 클릭 했을때 -> ReviewActivity 로 이동
             thumbnail.setOnClickListener {
@@ -60,16 +57,17 @@ class HomeAdapter(options: FirebaseRecyclerOptions<HomeItem>):
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_home, parent, false)
+        context = parent.context
+        val v = LayoutInflater.from(context).inflate(R.layout.item_home, parent, false)
         return ViewHolder(v)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: HomeItem) {
-        //TODO("Not yet implemented")
-//        예시
-//        holder.productId.text = model.pId.toString()
-//        holder.productName.text = model.pName
-//        holder.productQuantity.text = model.pQuantity.toString()
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: ReviewInfo) {
+        holder.title.text = model.reviewName
+        holder.period.text = model.period
+        holder.userID.text = "ⓒ${model.userId}"
+        holder.favorites.text = model.favorites.toString()
+        Glide.with(context).load(model.coverImg).thumbnail(0.1f).placeholder(R.drawable.ic_baseline_error_outline_24).into(holder.thumbnail)
     }
 
 }

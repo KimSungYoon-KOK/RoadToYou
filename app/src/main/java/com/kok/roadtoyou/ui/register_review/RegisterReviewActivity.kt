@@ -151,8 +151,8 @@ class RegisterReviewActivity : AppCompatActivity() {
 
                         //Cover Page 추가
                         reviewList.add(0, ReviewItem(0, null, null, null, null, null))
-                        val reviewInfo = ReviewInfo(title, planItem.period!!, key,
-                            reviewList[firstImgIndex].imgList!![0], user.uid, reviewList)
+                        val reviewInfo = ReviewInfo(title, planItem.period!!, key, planItem.planID!!,
+                            reviewList[firstImgIndex].imgList!![0], user.uid, 0, reviewList)
                         reviewDB = FirebaseDatabase.getInstance().getReference("reviews")
                         reviewDB.child("/$key").setValue(reviewInfo)
                         finish()

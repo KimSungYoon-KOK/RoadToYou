@@ -14,12 +14,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.kok.roadtoyou.R
 import com.kok.roadtoyou.ui.register_review.ReviewItem
-import com.kok.roadtoyou.ui.search.SearchDetailActivity
 import me.relex.circleindicator.CircleIndicator3
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
 import java.lang.ref.WeakReference
-import java.net.HttpURLConnection
 import java.net.URL
 import java.util.zip.DeflaterOutputStream
 

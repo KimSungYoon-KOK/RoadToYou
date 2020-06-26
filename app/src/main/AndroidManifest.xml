@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
         <!-- Google Play Service 버전 추가 -->
         <meta-data
             android:name="com.google.android.gms.version"
@@ -58,16 +59,19 @@
             android:name=".ui.member.SignUpActivity"
             android:parentActivityName=".ui.member.SignInActivity" />
         <activity android:name=".ui.member.NameActivity" />
+        <activity android:name=".ui.addplan.EditDateActivity"
+            android:theme="@style/noActionBarTheme"/>
         <activity
             android:name=".ui.addplan.MakePlanActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/noActionBarTheme" />
         <activity
             android:name=".ui.register_review.RegisterReviewActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".ui.review.ReviewActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/noActionBarTheme"/>
+            android:theme="@style/noActionBarTheme" />
         <activity
             android:name=".ui.search.SearchActivity"
             android:parentActivityName=".MainActivity">

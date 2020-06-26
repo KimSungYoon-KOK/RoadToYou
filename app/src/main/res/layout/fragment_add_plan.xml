@@ -51,7 +51,8 @@
                 android:background="@drawable/radius_btn"
                 android:padding="10dp"
                 android:text="친구 초대"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:visibility="gone"/>
         </LinearLayout>
     </LinearLayout>
 

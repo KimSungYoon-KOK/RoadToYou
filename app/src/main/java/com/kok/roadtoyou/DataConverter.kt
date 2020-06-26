@@ -1,5 +1,6 @@
 package com.kok.roadtoyou
 
+import com.google.android.gms.maps.model.LatLng
 import com.kok.roadtoyou.ui.addplan.AddPlaceItem
 import com.kok.roadtoyou.ui.addplan.PlanItem
 import com.kok.roadtoyou.ui.member.User
@@ -40,18 +41,35 @@ class DataConverter {
         val placeList = mutableListOf<AddPlaceItem>()
         val places = json.indexOf("placeList")
         if (places > 0) {
-            var placeStr = json.substring(places, (json.substring(places).indexOf("}},")+places))
-            placeStr = placeStr.split("placeList={")[1]
-            val temp = placeStr.split("}, ").toMutableList()
-            for (i in temp.indices) {
-                temp[i] = temp[i].split("={")[1]
-                val ttemp = temp[i].split(", ").toMutableList()
-                for (j in ttemp.indices) {
-                    ttemp[j] = ttemp[j].split("=")[1]
+            val tempIndex = json.substring(places).indexOf("}],")
+            if (tempIndex != -1) {
+                var placeStr = json.substring(places, (tempIndex+places))
+                placeStr = placeStr.split("placeList=[{")[1]
+                val temp = placeStr.split("}, ").toMutableList()
+                for (i in temp.indices) {
+                    //temp[i] = temp[i].split("={")[1]
+                    val ttemp = temp[i].split(", ").toMutableList()
+                    for (j in ttemp.indices) {
+                        ttemp[j] = ttemp[j].split("=")[1]
+                    }
+                    val item = AddPlaceItem(ttemp[0].toInt(), ttemp[1].toInt(), ttemp[3], ttemp[2].toInt(), ttemp[4].toInt(), ttemp[5])
+                    placeList.add(item)
                 }
-                val item = AddPlaceItem(ttemp[0].toInt(), ttemp[1].toInt(), ttemp[3], ttemp[2].toInt(), ttemp[4].toInt())
-                placeList.add(item)
+            } else {
+                var placeStr = json.substring(places, (json.substring(places).indexOf("}},")+places))
+                placeStr = placeStr.split("placeList={")[1]
+                val temp = placeStr.split("}, ").toMutableList()
+                for (i in temp.indices) {
+                    temp[i] = temp[i].split("={")[1]
+                    val ttemp = temp[i].split(", ").toMutableList()
+                    for (j in ttemp.indices) {
+                        ttemp[j] = ttemp[j].split("=")[1]
+                    }
+                    val item = AddPlaceItem(ttemp[0].toInt(), ttemp[1].toInt(), ttemp[3], ttemp[2].toInt(), ttemp[4].toInt(), ttemp[5])
+                    placeList.add(item)
+                }
             }
+
         }
 
         return PlanItem(planID, planName, period, days, userId, placeList)
@@ -111,6 +129,10 @@ class DataConverter {
         var reviewId = json.substring(rid_num, (json.substring(rid_num).indexOf(",")+rid_num))
         reviewId = reviewId.split("=")[1]
 
+        val pid_num = json.indexOf("planId")
+        var planId = json.substring(pid_num, (json.substring(pid_num).indexOf(",")+pid_num))
+        planId = planId.split("=")[1]
+
         val img_num = json.indexOf("coverImg")
         var coverImg = json.substring(img_num, (json.substring(img_num).indexOf(",")+img_num))
         coverImg = coverImg.split("=")[1]
@@ -118,6 +140,10 @@ class DataConverter {
         val uid_num = json.indexOf("userId")
         var userId = json.substring(uid_num, (json.substring(uid_num).indexOf("}")+uid_num))
         userId = userId.split("=")[1]
+
+        val f_num = json.indexOf("favorites")
+        var favorites = json.substring(f_num, (json.substring(f_num).indexOf(",")+f_num))
+        favorites = favorites.split("=")[1]
 
         val reviewList = mutableListOf<ReviewItem>()
         val list_num = json.indexOf("reviewList")
@@ -129,8 +155,7 @@ class DataConverter {
             reviewList.add(reviewItemConverter(list[i], i))
         }
 
-
-        return ReviewInfo(reviewName, period, reviewId, coverImg, userId, reviewList)
+        return  ReviewInfo(reviewName, period, reviewId, planId, coverImg, userId, favorites.toInt(), reviewList)
     }
 
     fun reviewItemConverter(json: String, index: Int): ReviewItem {

@@ -61,10 +61,12 @@ class MyPageFragment : Fragment() {
                     }
                     override fun onDataChange(p0: DataSnapshot) {
                         Log.d("Log_Plan_List_$i", p0.value.toString())
-                        val item = DataConverter().dataConvertMyItemFromPlan(p0.value.toString())
-                        Log.d("Log_Plan_Item_$i", item.toString())
-                        if (DataConverter().dateCalculate(item.period!!)) itemList[0].add(item)
-                        else itemList[1].add(item)
+                        if (p0.value != null) {
+                            val item = DataConverter().dataConvertMyItemFromPlan(p0.value.toString())
+                            Log.d("Log_Plan_Item_$i", item.toString())
+                            if (DataConverter().dateCalculate(item.period!!)) itemList[0].add(item)
+                            else itemList[1].add(item)
+                        }
                         adapter.notifyDataSetChanged()
                     }
                 })

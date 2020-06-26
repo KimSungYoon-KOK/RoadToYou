@@ -1,42 +1,89 @@
 package com.kok.roadtoyou.ui.addplan
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.kok.roadtoyou.R
+import kotlinx.android.synthetic.main.item_add_place.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
-class MakePlanRecyclerViewAdapter(var items: ArrayList<AddPlaceItem>)
-    :RecyclerView.Adapter<MakePlanRecyclerViewAdapter.ViewHolder>() {
+class MakePlanRecyclerViewAdapter(
+    var items: ArrayList<AddPlaceItem>,
+    var listener: RecyclerViewAdapterEventListener,
+    var startDragListener: OnStartDragListener
+) :RecyclerView.Adapter<MakePlanRecyclerViewAdapter.ViewHolder>(),  ItemTouchHelperCallback.OnItemMoveListener {
 
-    var itemClickListener: OnItemClickListener? = null
+    lateinit var context: Context
 
-    interface OnItemClickListener {
-        fun OnItemClick(view: View, position: Int)
+    interface RecyclerViewAdapterEventListener {
+        fun onChangeCallback(view: View, items: ArrayList<AddPlaceItem>)
+    }
+
+    interface OnStartDragListener {
+        fun onStartDrag(dragHolder: ViewHolder)
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var placeCount: TextView = itemView.findViewById(R.id.tv_placeCount)
         var placeNm: TextView = itemView.findViewById(R.id.tv_placeNm)
         var placeType: TextView = itemView.findViewById(R.id.tv_placeType)
-        var movebtn: ImageView = itemView.findViewById(R.id.movebtn)
-        var syncbtn : ImageView = itemView.findViewById(R.id.syncbtn)
-        var editbtn : ImageView = itemView.findViewById(R.id.editbtn)
+        var moveBtn: ImageView = itemView.findViewById(R.id.movebtn)
+        var syncBtn : ImageView = itemView.findViewById(R.id.syncbtn)
+        var editBtn : ImageView = itemView.findViewById(R.id.editbtn)
 
         init {
-            itemView.setOnClickListener {
-                itemClickListener?.OnItemClick(it, adapterPosition)
+            editBtn.setOnClickListener { view ->
+                val popupMenu = PopupMenu(context, view)
+                popupMenu.setOnMenuItemClickListener {
+                    when(it.itemId){
+                        R.id.edit_order ->{
+                            moveBtn.visibility = View.VISIBLE
+                            syncBtn.visibility = View.VISIBLE
+                            true
+                        }
+                        R.id.deletePlace ->{
+                            items.removeAt(adapterPosition)
+                            notifyItemRemoved(adapterPosition)
+                            for (i in 0 until items.size) {
+                                items[i].count = i + 1
+                            }
+                            listener.onChangeCallback(itemView, items)
+                            notifyDataSetChanged()
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                popupMenu.inflate(R.menu.edit_plan_menu)
+
+                try {
+                    val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+                    fieldMPopup.isAccessible = true
+                    val mPopup = fieldMPopup.get(popupMenu)
+                    mPopup.javaClass
+                        .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                        .invoke(mPopup, true)
+                } catch (e: Exception){
+                    Log.e("Main", "Error showing menu icons.", e)
+                } finally {
+                    popupMenu.show()
+                }
             }
         }
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.item_add_place, parent, false)
+        context = parent.context
+        val v = LayoutInflater.from(context).inflate(R.layout.item_add_place, parent, false)
         return ViewHolder(v)
     }
 
@@ -56,6 +103,47 @@ class MakePlanRecyclerViewAdapter(var items: ArrayList<AddPlaceItem>)
             39 -> "음식점"
             else -> "기타"
         }
+
+        holder.moveBtn.setOnTouchListener { view, motionEvent ->
+            if (motionEvent.actionMasked == MotionEvent.ACTION_DOWN) {
+                startDragListener.onStartDrag(holder)
+            }
+            return@setOnTouchListener false
+        }
+
+        holder.itemView.syncbtn.setOnClickListener {
+            holder.itemView.movebtn.visibility = View.GONE
+            holder.itemView.syncbtn.visibility = View.GONE
+
+            holder.itemView.editbtn.visibility = View.VISIBLE
+            listener.onChangeCallback(it, items)
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun onItemMove(
+        fromPosition: Int,
+        toPosition: Int,
+        viewHolder: RecyclerView.ViewHolder
+    ): Boolean {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(items, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(items, i, i - 1)
+            }
+        }
+
+        for (i in 0 until items.size) {
+            items[i].count = i + 1
+        }
+
+        notifyItemMoved(fromPosition, toPosition)
+        //notifyDataSetChanged()
+        listener.onChangeCallback(viewHolder.itemView, items)
+        return true
     }
 
 }
