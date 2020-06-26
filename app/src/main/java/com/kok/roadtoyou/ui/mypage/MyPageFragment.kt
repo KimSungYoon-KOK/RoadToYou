@@ -1,5 +1,7 @@
 package com.kok.roadtoyou.ui.mypage
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -123,6 +125,16 @@ class MyPageFragment : Fragment() {
                     initViewPager()
                 }
             })
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            if (fragmentManager != null) {
+                val fragment = fragmentManager!!.beginTransaction()
+                fragment.detach(this).attach(this).commit()
+            }
         }
     }
 }

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.kok.roadtoyou.R
 
 class RegisterRecyclerViewAdapter(private val imgList: MutableList<String>)
@@ -42,6 +44,7 @@ class RegisterRecyclerViewAdapter(private val imgList: MutableList<String>)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val storageReference = Firebase.storage
         Glide.with(context).load(imgList[position]).thumbnail(0.1f)
             .placeholder(R.drawable.ic_baseline_error_outline_24)
             .into(holder.imageView)

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.kok.roadtoyou.ui.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label="201811162_김성윤"
         tools:layout="@layout/fragment_home" />
 
     <fragment

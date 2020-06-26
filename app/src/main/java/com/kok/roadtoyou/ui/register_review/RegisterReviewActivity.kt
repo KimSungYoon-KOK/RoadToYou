@@ -24,6 +24,10 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.kok.roadtoyou.BackPressCloseHandler
 import com.kok.roadtoyou.DataConverter
 import com.kok.roadtoyou.R
@@ -42,6 +46,7 @@ class RegisterReviewActivity : AppCompatActivity() {
     lateinit var plansDB: DatabaseReference
     lateinit var reviewDB: DatabaseReference
     lateinit var userDB: DatabaseReference
+    lateinit var storage: FirebaseStorage
 
     lateinit var adapter: RegisterViewPagerAdapter
     lateinit var planItem: PlanItem
@@ -217,9 +222,27 @@ class RegisterReviewActivity : AppCompatActivity() {
                 imageFilePath = images[i].path
                 reviewList[index].imgList!!.add(imageFilePath)
                 Log.d("Log_Image_File_Path_ImagePicker", imageFilePath)
+//                storage = FirebaseStorage.getInstance()
+//                val storageRef = storage.getReference("images")
+//                val file = Uri.fromFile(File(imageFilePath))
+//                //val riversRef = storageRef.child("images/${file.lastPathSegment}")
+//                val riversRef = storageRef.child("images/$imageFilePath")
+//                val uploadTask = riversRef.putFile(file)
+//
+//                // Register observers to listen for when the download is done or if it fails
+//                uploadTask.addOnFailureListener {
+//                    // Handle unsuccessful uploads
+//                }.addOnSuccessListener {
+//                    // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+//                    // ...
+//                    adapter.notifyDataSetChanged()
+//                }
             }
             adapter.notifyDataSetChanged()
+        } else {
+            Log.d("Log_Image_File_Path_ImagePicker", "imagepicker data null")
         }
+
     }
 
 
