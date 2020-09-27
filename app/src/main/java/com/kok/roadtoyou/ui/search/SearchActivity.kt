@@ -19,7 +19,7 @@ import java.net.URLEncoder
 
 class SearchActivity : AppCompatActivity() {
 
-    private val key = "V3TPLc8KikVyK235xNyOorabnl1eDnekQJSTWtpl4eQXyE3MWxAUjlZXJo6PIxrmLZGlixdOVWTSs8PmCfb4nQ%3D%3D"
+    private val key = getString(R.string.api_key)
     private val suffix = "MobileOS=AND&MobileApp=roadtoyou"
 
     private val itemList = ArrayList<ArrayList<PlaceItem>>()

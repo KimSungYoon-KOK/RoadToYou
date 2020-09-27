@@ -20,7 +20,7 @@ import java.net.URL
 
 class SearchDetailActivity : AppCompatActivity() {
 
-    private val key = "V3TPLc8KikVyK235xNyOorabnl1eDnekQJSTWtpl4eQXyE3MWxAUjlZXJo6PIxrmLZGlixdOVWTSs8PmCfb4nQ%3D%3D"
+    private val key = getString(R.string.api_key)
     private val suffix = "&imageYN=Y&MobileOS=AND&MobileApp=roadtoyou"
 
     private var imgList = ArrayList<String>()
